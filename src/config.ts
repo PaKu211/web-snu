@@ -43,3 +43,7 @@ export const SERI_META: Record<string, { label: string; description: string }> =
     description: "Kisah fiksi fantasi mistis tentang Sakti, Bayu, dan perjalanan dimensi transisi.",
   },
 }
+
+// URL RSS Feed Quora (bisa diisi dengan link RSS yang dibuat dari generator gratis seperti rss.app)
+export const QUORA_RSS_FEED_URL = "https://rss.app/feeds/example.xml" // Ganti dengan RSS URL asli Anda
+

@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync-quora": "node scripts/sync-quora.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.6",
