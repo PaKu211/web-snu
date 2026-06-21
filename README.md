@@ -1,2 +1,105 @@
-# web-snu
-Website snu
+# 🌌 Portal Sekala Niskala Universe (SNU)
+
+Selamat datang di repositori web portal **Sekala Niskala Universe**. Website ini dibangun menggunakan **Astro v5 (Static Output)**, **React**, **Tailwind CSS v4**, dan **Keystatic CMS** untuk menghadirkan pengalaman membaca yang cepat, modern, estetik, dan mudah dikelola oleh komunitas.
+
+Website ini **sudah 100% siap untuk rilis (Production Ready)** dengan performa LCP yang dioptimalkan, integrasi komentar Waline bebas konflik, serta dukungan otomatisasi CI/CD menggunakan Travis CI.
+
+---
+
+## 🚀 Panduan Memulai Cepat (Quick Start)
+
+### Persyaratan Sistem
+* **Node.js** v24 atau lebih baru.
+* **pnpm** (Package Manager).
+
+### Pengembangan Lokal (Development)
+Untuk menjalankan website di komputer lokal:
+```bash
+# 1. Install dependensi
+pnpm install
+
+# 2. Jalankan server dev lokal
+pnpm run dev
+```
+Buka `http://localhost:4321` di browser Anda.
+
+### Uji Coba Build Produksi (Production Build)
+Untuk melakukan kompilasi file statis lokal sebelum dipublikasikan:
+```bash
+pnpm run build
+```
+Hasil build akan tersimpan di direktori `dist/` dan siap disajikan secara statis.
+
+---
+
+## ✍️ Panduan Penulis & Pengelola Konten (CMS)
+
+Kami menggunakan **Keystatic CMS** yang memungkinkan penulisan konten langsung melalui antarmuka web (WYSIWYG) yang intuitif.
+
+### 1. Cara Masuk ke Halaman Admin (Keystatic)
+* **Di Lokal (Development):** Akses link `http://localhost:4321/keystatic` saat server dev lokal berjalan. Anda bisa langsung membuat, mengedit, atau menghapus artikel. Perubahan akan langsung disimpan dalam bentuk file Markdown (`.mdx`) di folder proyek Anda.
+* **Di Live Website (Production):** Akses `https://domain-anda.com/keystatic`. Keystatic dikonfigurasi menggunakan **GitHub Storage Mode**. Penulis akan diminta login menggunakan akun GitHub mereka. Setiap perubahan yang disimpan penulis di web akan otomatis membuat commit baru langsung ke repositori GitHub ini.
+
+### 2. Panduan Menulis Artikel Baru
+Saat membuat artikel baru di Keystatic, harap lengkapi kolom berikut:
+1. **Title:** Judul artikel.
+2. **Slug:** URL halaman (otomatis dibuat dari judul).
+3. **Description:** Ringkasan artikel untuk pembaca dan SEO (pastikan menarik).
+4. **Author:** Nama penulis/kontributor.
+5. **Publish Date:** Tanggal tayang.
+6. **Tags:** Pilih tag tema yang sesuai (misal: `spiritual`, `niskala`, `wpm-saga`).
+7. **Seri:** Pilih seri jika artikel termasuk dalam rangkaian cerita (misal: `wpm-saga`).
+8. **Cover Image:** Unggah gambar sampul (format JPG/PNG/WebP). Gambar ini otomatis dikompresi oleh Astro untuk performa LCP yang cepat.
+9. **Draft:** Centang ini jika artikel masih dalam tahap penyusunan dan belum ingin dipublikasikan di live website.
+
+---
+
+## 🔗 Panduan Menyematkan (Embed) Postingan Quora
+
+Karena anggota komunitas masih aktif menulis di Quora Space Sekala Niskala, Anda dapat menyisipkan postingan Quora pilihan ke dalam badan artikel Markdown (`.mdx`) secara estetik.
+
+### Cara Menggunakan Komponen `<QuoraEmbed />`
+Di bagian paling bawah/atas artikel Keystatic, atau langsung di dalam file `.mdx`, Anda dapat menuliskan kode berikut:
+
+```mdx
+import QuoraEmbed from "@/components/QuoraEmbed.astro"
+
+<QuoraEmbed url="https://sekalaniskalauniverse.quora.com/Judul-Postingan-Anda" />
+```
+
+* **url (Wajib):** Tautan url postingan lengkap dari Quora Space Anda.
+* **embedId (Opsional):** Jika Anda menyalin kode embed resmi dari Quora (lewat tombol titik tiga `...` > *Embed Post*), Anda bisa memasukkan kode ID-nya saja ke dalam parameter `embedId` (misal: `embedId="p8Q5rXJ8c6"`).
+
+---
+
+## 💬 Konfigurasi Kolom Komentar (Waline)
+
+Kami menggunakan **Waline** untuk sistem komentar karena mendukung login umum, emoji, markdown, dan notifikasi tanpa memerlukan server berbayar.
+
+### Menggunakan Server Waline Bersama (Shared Server)
+Sistem komentar Sekala Niskala telah diprogram agar tidak bentrok dengan website lain meskipun Anda menggunakan 1 server Waline yang sama. Semua data komentar akan diberi prefix khusus `snu:` di database Anda.
+
+### Cara Menghubungkan ke Server Waline Anda:
+1. Buka file `.env` di root proyek (atau buat file `.env` baru jika belum ada).
+2. Masukkan URL server Waline Anda:
+   ```env
+   PUBLIC_WALINE_SERVER_URL=https://nama-server-waline-anda.vercel.app
+   ```
+3. Saat website di-deploy, fitur komentar akan langsung aktif dan terhubung ke database Anda.
+
+---
+
+## 🛠️ Panduan Integrasi Travis CI & GitHub Pages
+
+Repositori ini telah dilengkapi dengan `.travis.yml` untuk otomatisasi deploy ke GitHub Pages setiap kali Anda melakukan push ke branch `main`.
+
+### Langkah-langkah Aktivasi:
+1. Masuk ke **[travis-ci.com](https://travis-ci.com/)** menggunakan akun GitHub Anda.
+2. Aktifkan repositori `PaKu211/web-snu` di dashboard Travis Anda.
+3. Buka **Settings** dari repositori tersebut di Travis CI.
+4. Tambahkan **Environment Variable** baru:
+   * **Name:** `GITHUB_TOKEN`
+   * **Value:** *[Personal Access Token GitHub Anda dengan hak akses `repo` atau `write to pages`]*
+5. Selesai! Setiap ada commit baru di branch `main`, Travis CI akan otomatis membuild situs Anda dan memperbarui branch `gh-pages` untuk ditayangkan.
+
+*(Catatan: Jika Anda menggunakan custom domain di GitHub Pages, pastikan untuk memasang file `CNAME` berisi domain Anda di dalam folder `public/` agar tidak terhapus saat deployment otomatis berjalan).*
