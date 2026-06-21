@@ -31,6 +31,8 @@
     "@types/react-dom": "^18.3.7",
     "pagefind": "^1.4.0",
     "puppeteer": "^25.1.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "typescript": "^5.7.3"
   },
   "pnpm": {
