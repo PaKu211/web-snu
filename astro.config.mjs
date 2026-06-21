@@ -3,7 +3,7 @@ import react from "@astrojs/react"
 import mdx from "@astrojs/mdx"
 import sitemap from "@astrojs/sitemap"
 import tailwindcss from "@tailwindcss/vite"
-import { kyso } from "@keystatic/astro"
+import keystatic from "@keystatic/astro"
 
 export default defineConfig({
   site: "https://snu.pages.dev",
@@ -11,10 +11,7 @@ export default defineConfig({
     react(),
     mdx(),
     sitemap(),
-    kyso({
-      root: "content",
-      auth: false
-    })
+    keystatic()
   ],
   vite: {
     plugins: [tailwindcss()],
