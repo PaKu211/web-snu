@@ -46,7 +46,31 @@ export default config({
         sourceUrl: fields.url({ label: "Source URL (Quora/Lainnya)" }),
         content: fields.document({
           label: "Konten",
-          formatting: true,
+          formatting: {
+            inlineMarks: {
+              bold: true,
+              italic: true,
+              underline: true,
+              strikethrough: true,
+              code: true,
+              superscript: true,
+              subscript: true,
+            },
+            listTypes: {
+              ordered: true,
+              unordered: true,
+            },
+            headingLevels: [1, 2, 3, 4, 5, 6],
+            blockTypes: {
+              blockquote: true,
+              code: true,
+            },
+            alignment: {
+              center: true,
+              end: true,
+            },
+            softBreaks: true,
+          },
           dividers: true,
           links: true,
           tables: true,
@@ -77,7 +101,31 @@ export default config({
         draft: fields.checkbox({ label: "Draf", defaultValue: false }),
         content: fields.document({
           label: "Detail Event",
-          formatting: true,
+          formatting: {
+            inlineMarks: {
+              bold: true,
+              italic: true,
+              underline: true,
+              strikethrough: true,
+              code: true,
+              superscript: true,
+              subscript: true,
+            },
+            listTypes: {
+              ordered: true,
+              unordered: true,
+            },
+            headingLevels: [1, 2, 3, 4, 5, 6],
+            blockTypes: {
+              blockquote: true,
+              code: true,
+            },
+            alignment: {
+              center: true,
+              end: true,
+            },
+            softBreaks: true,
+          },
           dividers: true,
           links: true,
           tables: true,
