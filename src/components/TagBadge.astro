@@ -1,0 +1,21 @@
+---
+import { tagLabel } from "@/lib/utils"
+interface Props {
+  tag: string
+  link?: boolean
+}
+const { tag, link = true } = Astro.props
+const label = tagLabel(tag)
+const classes =
+  "inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-muted)] transition-colors hover:border-[var(--color-primary)] hover:text-[var(--color-foreground)]"
+---
+
+{
+  link ? (
+    <a href={`/tag/${tag}`} class={classes}>
+      #{label}
+    </a>
+  ) : (
+    <span class={classes}>#{label}</span>
+  )
+}

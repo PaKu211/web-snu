@@ -1,0 +1,36 @@
+---
+import type { GetStaticPaths, Page } from "astro"
+import { getCollection } from "astro:content"
+import type { CollectionEntry } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import ArticleFeed from "@/components/ArticleFeed.astro"
+import { collectSeri, collectTags, sortArtikel } from "@/lib/utils"
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const all = sortArtikel(await getCollection("artikel"))
+  return paginate(all, { pageSize: 9 })
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<CollectionEntry<"artikel">>
+}
+const { page } = Astro.props
+
+const all = sortArtikel(await getCollection("artikel"))
+const tags = collectTags(all)
+const seri = collectSeri(all)
+const bodies = Object.fromEntries(all.map((a) => [a.id, a.body ?? ""]))
+---
+
+<BaseLayout title={`Artikel — Halaman ${page.currentPage}`} description="Semua tulisan dari komunitas Sekala Niskala.">
+  <ArticleFeed
+    entries={page.data}
+    bodies={bodies}
+    tags={tags}
+    seri={seri}
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+    prevUrl={page.currentPage === 2 ? "/artikel" : page.url.prev}
+    nextUrl={page.url.next}
+  />
+</BaseLayout>

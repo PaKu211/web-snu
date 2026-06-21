@@ -1,0 +1,33 @@
+---
+// Scroll-based reading progress bar fixed under the navbar.
+---
+
+<div
+  class="fixed inset-x-0 top-16 z-40 h-0.5 bg-transparent"
+  role="progressbar"
+  aria-label="Kemajuan membaca"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  id="reading-progress-track"
+>
+  <div
+    id="reading-progress-bar"
+    class="h-full w-0 origin-left bg-[var(--color-primary)] transition-[width] duration-75 ease-out"
+  >
+  </div>
+</div>
+
+<script>
+  const bar = document.getElementById("reading-progress-bar")
+  const track = document.getElementById("reading-progress-track")
+  function update() {
+    const scrollTop = window.scrollY
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+    const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0
+    if (bar) bar.style.width = `${pct}%`
+    track?.setAttribute("aria-valuenow", String(Math.round(pct)))
+  }
+  window.addEventListener("scroll", update, { passive: true })
+  window.addEventListener("resize", update)
+  update()
+</script>

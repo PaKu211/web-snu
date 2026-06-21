@@ -1,0 +1,49 @@
+---
+import { SITE } from "@/config"
+interface Props {
+  eyebrow?: string
+  title?: string
+  subtitle?: string
+}
+const {
+  eyebrow = "Sekala · Niskala",
+  title = "Yang tampak, dan yang tak tampak.",
+  subtitle = SITE.description,
+} = Astro.props
+---
+
+<section class="relative overflow-hidden border-b border-[var(--color-border)]">
+  <div
+    class="pointer-events-none absolute inset-0 opacity-60"
+    aria-hidden="true"
+    style="background: radial-gradient(60% 80% at 50% -10%, color-mix(in oklch, var(--color-primary) 22%, transparent), transparent 70%);"
+  >
+  </div>
+  <div class="relative mx-auto max-w-5xl px-4 py-20 text-center sm:px-6 sm:py-28">
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-primary)]">
+      {eyebrow}
+    </p>
+    <h1
+      class="mx-auto mt-5 max-w-3xl font-serif text-4xl font-semibold leading-tight text-balance sm:text-5xl"
+    >
+      {title}
+    </h1>
+    <p class="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted)] text-pretty sm:text-lg">
+      {subtitle}
+    </p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/artikel"
+        class="inline-flex items-center rounded-md bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--color-primary-foreground)] transition-opacity hover:opacity-90"
+      >
+        Baca Artikel
+      </a>
+      <a
+        href="/tentang"
+        class="inline-flex items-center rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--color-foreground)] transition-colors hover:bg-[var(--color-surface-2)]"
+      >
+        Tentang Kami
+      </a>
+    </div>
+  </div>
+</section>

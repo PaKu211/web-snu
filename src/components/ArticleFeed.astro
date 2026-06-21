@@ -1,0 +1,89 @@
+---
+import type { CollectionEntry } from "astro:content"
+import Breadcrumb from "@/components/Breadcrumb.astro"
+import ArticleCard from "@/components/ArticleCard.astro"
+import Pagination from "@/components/Pagination.astro"
+import EmptyState from "@/components/EmptyState.astro"
+
+interface Props {
+  entries: CollectionEntry<"artikel">[]
+  bodies: Record<string, string>
+  tags: { tag: string; count: number }[]
+  seri: { seri: string; count: number }[]
+  currentPage: number
+  lastPage: number
+  prevUrl?: string
+  nextUrl?: string
+}
+const { entries, bodies, tags, seri, currentPage, lastPage, prevUrl, nextUrl } = Astro.props
+---
+
+<div class="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+  <Breadcrumb items={[{ label: "Artikel" }]} />
+
+  <header class="mb-8">
+    <h1 class="font-serif text-3xl font-semibold sm:text-4xl">Artikel</h1>
+    <p class="mt-2 text-[var(--color-muted)]">
+      Semua tulisan komunitas — refleksi, perjalanan, dan ruang di antaranya.
+    </p>
+  </header>
+
+  {
+    (tags.length > 0 || seri.length > 0) && (
+      <div class="mb-10 flex flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+        {tags.length > 0 && (
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
+              Tag
+            </span>
+            {tags.map(({ tag, count }) => (
+              <a
+                href={`/tag/${tag}`}
+                class="inline-flex items-center gap-1 rounded-full border border-[var(--color-border)] px-2.5 py-0.5 text-xs font-medium transition-colors hover:border-[var(--color-primary)]"
+              >
+                #{tag}
+                <span class="text-[var(--color-muted)]">{count}</span>
+              </a>
+            ))}
+          </div>
+        )}
+        {seri.length > 0 && (
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
+              Seri
+            </span>
+            {seri.map(({ seri: s, count }) => (
+              <a
+                href={`/seri/${s}`}
+                class="inline-flex items-center gap-1 rounded-full bg-[var(--color-primary)]/15 px-2.5 py-0.5 text-xs font-semibold text-[var(--color-primary)]"
+              >
+                {s}
+                <span class="opacity-70">{count}</span>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  {
+    entries.length > 0 ? (
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {entries.map((entry) => (
+          <ArticleCard entry={entry} body={bodies[entry.id]} />
+        ))}
+      </div>
+    ) : (
+      <EmptyState title="Belum ada tulisan" description="Artikel akan muncul di sini setelah dipublikasikan." />
+    )
+  }
+
+  <Pagination
+    currentPage={currentPage}
+    lastPage={lastPage}
+    prevUrl={prevUrl}
+    nextUrl={nextUrl}
+    baseUrl="/artikel"
+  />
+</div>

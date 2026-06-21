@@ -1,0 +1,18 @@
+---
+import { formatDate } from "@/lib/utils"
+interface Props {
+  author: string
+  publishDate: Date
+  minutes: number
+  class?: string
+}
+const { author, publishDate, minutes, class: className } = Astro.props
+---
+
+<div class:list={["flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--color-muted)]", className]}>
+  <span class="font-medium text-[var(--color-foreground)]">{author}</span>
+  <span aria-hidden="true">&middot;</span>
+  <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
+  <span aria-hidden="true">&middot;</span>
+  <span>{minutes} menit baca</span>
+</div>

@@ -1,0 +1,66 @@
+---
+interface Props {
+  currentPage: number
+  lastPage: number
+  prevUrl?: string
+  nextUrl?: string
+  baseUrl: string
+}
+const { currentPage, lastPage, prevUrl, nextUrl, baseUrl } = Astro.props
+
+function pageUrl(n: number) {
+  return n === 1 ? baseUrl : `${baseUrl}/page/${n}`
+}
+
+const base =
+  "inline-flex h-9 min-w-9 items-center justify-center rounded-md border border-[var(--color-border)] px-3 text-sm font-medium transition-colors"
+const enabled = "bg-[var(--color-surface)] text-[var(--color-foreground)] hover:bg-[var(--color-surface-2)]"
+const disabled = "cursor-not-allowed opacity-40 bg-[var(--color-surface)] text-[var(--color-muted)]"
+---
+
+{
+  lastPage > 1 && (
+    <nav aria-label="Paginasi" class="mt-12 flex items-center justify-center gap-2">
+      {prevUrl ? (
+        <a href={prevUrl} rel="prev" class:list={[base, enabled]}>
+          &larr; Sebelumnya
+        </a>
+      ) : (
+        <span class:list={[base, disabled]} aria-disabled="true">
+          &larr; Sebelumnya
+        </span>
+      )}
+
+      <div class="hidden items-center gap-1 sm:flex">
+        {Array.from({ length: lastPage }, (_, i) => i + 1).map((n) => (
+          <a
+            href={pageUrl(n)}
+            aria-current={n === currentPage ? "page" : undefined}
+            class:list={[
+              base,
+              n === currentPage
+                ? "bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
+                : enabled,
+            ]}
+          >
+            {n}
+          </a>
+        ))}
+      </div>
+
+      <span class="text-sm text-[var(--color-muted)] sm:hidden">
+        {currentPage} / {lastPage}
+      </span>
+
+      {nextUrl ? (
+        <a href={nextUrl} rel="next" class:list={[base, enabled]}>
+          Berikutnya &rarr;
+        </a>
+      ) : (
+        <span class:list={[base, disabled]} aria-disabled="true">
+          Berikutnya &rarr;
+        </span>
+      )}
+    </nav>
+  )
+}

@@ -1,0 +1,55 @@
+---
+import type { TocItem } from "@/lib/utils"
+interface Props {
+  toc: TocItem[]
+}
+const { toc } = Astro.props
+---
+
+{
+  toc.length > 0 && (
+    <nav aria-label="Daftar isi" class="toc text-sm">
+      <h2 class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
+        Daftar Isi
+      </h2>
+      <ul class="flex flex-col gap-1 border-l border-[var(--color-border)]">
+        {toc.map((item) => (
+          <li>
+            <a
+              href={`#${item.slug}`}
+              data-toc-link={item.slug}
+              class:list={[
+                "block border-l-2 border-transparent py-1 text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]",
+                item.depth === 2 ? "-ml-px pl-3" : "-ml-px pl-6",
+              ]}
+            >
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"))
+  if (links.length) {
+    const map = new Map(links.map((l) => [l.dataset.tocLink, l]))
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            links.forEach((l) =>
+              l.classList.remove("!border-[var(--color-primary)]", "!text-[var(--color-foreground)]"),
+            )
+            const active = map.get(entry.target.id)
+            active?.classList.add("!border-[var(--color-primary)]", "!text-[var(--color-foreground)]")
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -70% 0px" },
+    )
+    document.querySelectorAll("article h2, article h3").forEach((h) => observer.observe(h))
+  }
+</script>

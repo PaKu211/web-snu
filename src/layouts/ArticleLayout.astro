@@ -1,0 +1,105 @@
+---
+import { Image } from "astro:assets"
+import type { CollectionEntry } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import Breadcrumb from "@/components/Breadcrumb.astro"
+import ArticleMeta from "@/components/ArticleMeta.astro"
+import TableOfContents from "@/components/TableOfContents.astro"
+import RelatedArticles from "@/components/RelatedArticles.astro"
+import ReadingProgress from "@/components/ReadingProgress.astro"
+import TagBadge from "@/components/TagBadge.astro"
+import SeriBadge from "@/components/SeriBadge.astro"
+import { buildToc, readingTime, seriLabel } from "@/lib/utils"
+import type { TocItem } from "@/lib/utils"
+
+interface Props {
+  entry: CollectionEntry<"artikel">
+  headings: { depth: number; slug: string; text: string }[]
+  rawBody: string
+  related: CollectionEntry<"artikel">[]
+}
+
+const { entry, headings, rawBody, related } = Astro.props
+const { title, description, author, publishDate, tags, seri, cover, draft, sourceUrl } = entry.data
+const minutes = readingTime(rawBody)
+const toc: TocItem[] = buildToc(headings)
+---
+
+<BaseLayout title={title} description={description} type="article" image={cover ? undefined : "/og-default.png"}>
+  <ReadingProgress />
+
+  <div class="mx-auto max-w-3xl px-4 pb-16 pt-8 sm:px-6">
+    <Breadcrumb items={[{ label: "Artikel", href: "/artikel" }, { label: title }]} />
+
+    <header class="mb-8">
+      <div class="mb-4 flex flex-wrap items-center gap-2">
+        {seri && <SeriBadge seri={seri} />}
+        {draft && (
+          <span class="inline-flex items-center rounded-full bg-[var(--color-accent)]/20 px-2.5 py-0.5 text-xs font-semibold text-[var(--color-accent)]">
+            Draf
+          </span>
+        )}
+      </div>
+
+      <h1 class="font-serif text-3xl font-semibold leading-tight text-balance sm:text-4xl">
+        {title}
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-[var(--color-muted)] text-pretty">{description}</p>
+
+      <ArticleMeta author={author} publishDate={publishDate} minutes={minutes} class="mt-5" />
+    </header>
+
+    {
+      cover && (
+        <Image
+          src={cover}
+          alt={`Ilustrasi untuk artikel ${title}`}
+          widths={[480, 768, 1200]}
+          sizes="(min-width: 768px) 768px, 100vw"
+          class="mb-10 aspect-[16/9] w-full rounded-[var(--radius-lg)] object-cover"
+        />
+      )
+    }
+
+    <div class="lg:grid lg:grid-cols-[1fr_220px] lg:gap-10">
+      <div class="prose min-w-0">
+        <slot />
+      </div>
+
+      {
+        toc.length > 0 && (
+          <aside class="hidden lg:block">
+            <div class="sticky top-24">
+              <TableOfContents toc={toc} />
+            </div>
+          </aside>
+        )
+      }
+    </div>
+
+    {
+      tags.length > 0 && (
+        <div class="mt-12 flex flex-wrap items-center gap-2 border-t border-[var(--color-border)] pt-6">
+          <span class="text-sm text-[var(--color-muted)]">Tag:</span>
+          {tags.map((tag) => (
+            <TagBadge tag={tag} />
+          ))}
+        </div>
+      )
+    }
+
+    {
+      sourceUrl && (
+        <p class="mt-4 text-xs text-[var(--color-muted)]">
+          Tulisan ini awalnya terbit di{" "}
+          <a href={sourceUrl} class="underline hover:text-[var(--color-foreground)]" rel="noopener noreferrer" target="_blank">
+            sumber aslinya
+          </a>
+          .
+        </p>
+      )
+    }
+
+    <RelatedArticles entries={related} />
+  </div>
+</BaseLayout>

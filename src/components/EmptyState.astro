@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string
+  description?: string
+  ctaLabel?: string
+  ctaHref?: string
+}
+const { title, description, ctaLabel, ctaHref } = Astro.props
+---
+
+<div
+  class="flex flex-col items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-16 text-center"
+>
+  <div
+    class="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-surface-2)] text-[var(--color-muted)]"
+    aria-hidden="true"
+  >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+      <path d="M14 2v6h6"></path>
+    </svg>
+  </div>
+  <h2 class="mt-4 font-serif text-lg font-semibold">{title}</h2>
+  {description && <p class="mt-1 max-w-sm text-sm text-[var(--color-muted)]">{description}</p>}
+  {
+    ctaLabel && ctaHref && (
+      <a
+        href={ctaHref}
+        class="mt-5 inline-flex items-center rounded-md bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-[var(--color-primary-foreground)] transition-opacity hover:opacity-90"
+      >
+        {ctaLabel}
+      </a>
+    )
+  }
+</div>

@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import Hero from "@/components/Hero.astro"
+import ArticleCard from "@/components/ArticleCard.astro"
+import EmptyState from "@/components/EmptyState.astro"
+import TagBadge from "@/components/TagBadge.astro"
+import { collectTags, sortArtikel } from "@/lib/utils"
+
+const all = sortArtikel(await getCollection("artikel"))
+const featured = all.find((a) => a.data.featured) ?? all[0]
+const rest = all.filter((a) => a.id !== featured?.id).slice(0, 6)
+const tags = collectTags(all).slice(0, 8)
+const bodies = Object.fromEntries(all.map((a) => [a.id, a.body ?? ""]))
+---
+
+<BaseLayout>
+  <Hero />
+
+  <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6">
+    {
+      featured && (
+        <section class="mb-14" aria-labelledby="featured-heading">
+          <div class="mb-5 flex items-baseline justify-between">
+            <h2 id="featured-heading" class="font-serif text-2xl font-semibold">
+              Disematkan
+            </h2>
+          </div>
+          <ArticleCard entry={featured} body={bodies[featured.id]} featured />
+        </section>
+      )
+    }
+
+    {
+      tags.length > 0 && (
+        <section class="mb-14" aria-labelledby="tags-heading">
+          <h2 id="tags-heading" class="mb-4 font-serif text-2xl font-semibold">
+            Telusuri Tema
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {tags.map(({ tag, count }) => (
+              <a
+                href={`/tag/${tag}`}
+                class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm font-medium transition-colors hover:border-[var(--color-primary)]"
+              >
+                #{tag}
+                <span class="text-xs text-[var(--color-muted)]">{count}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="latest-heading">
+      <div class="mb-5 flex items-baseline justify-between">
+        <h2 id="latest-heading" class="font-serif text-2xl font-semibold">Tulisan Terbaru</h2>
+        <a href="/artikel" class="text-sm font-medium text-[var(--color-primary)] hover:underline">
+          Lihat semua &rarr;
+        </a>
+      </div>
+      {
+        rest.length > 0 ? (
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {rest.map((entry) => (
+              <ArticleCard entry={entry} body={bodies[entry.id]} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Belum ada tulisan"
+            description="Artikel pertama akan segera hadir. Pantau terus ruang ini."
+          />
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

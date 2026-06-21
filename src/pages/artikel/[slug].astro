@@ -1,0 +1,30 @@
+---
+import type { GetStaticPaths } from "astro"
+import { getCollection, render } from "astro:content"
+import type { CollectionEntry } from "astro:content"
+import ArticleLayout from "@/layouts/ArticleLayout.astro"
+import { relatedArtikel, sortArtikel } from "@/lib/utils"
+
+export const getStaticPaths = (async () => {
+  const all = (await getCollection("artikel")).filter(
+    (entry) => import.meta.env.DEV || !entry.data.draft,
+  )
+  return all.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+interface Props {
+  entry: CollectionEntry<"artikel">
+}
+const { entry } = Astro.props
+const { Content, headings } = await render(entry)
+
+const all = sortArtikel(await getCollection("artikel"))
+const related = relatedArtikel(entry, all)
+---
+
+<ArticleLayout entry={entry} headings={headings} rawBody={entry.body ?? ""} related={related}>
+  <Content />
+</ArticleLayout>
