@@ -1,0 +1,38 @@
+---
+interface Props {
+  url: string;
+  embedId?: string;
+}
+
+const { url, embedId } = Astro.props;
+// Use the custom embedId if provided, otherwise extract or use the url
+const displayId = embedId || url;
+---
+
+<div class="quora-embed-container my-8 flex justify-center w-full">
+  <div class="w-full max-w-[550px] rounded-2xl border border-[var(--color-border)]/40 bg-[var(--color-surface-2)]/30 p-4 shadow-sm">
+    <blockquote class="quora-embed-post" data-embed={displayId}>
+      <a href={url} target="_blank" rel="noopener noreferrer" class="text-sm font-mono text-[var(--color-primary)] hover:underline">
+        Membaca postingan Sekala Niskala di Quora &rarr;
+      </a>
+    </blockquote>
+  </div>
+</div>
+
+<!-- Load Quora Embed Script (Async, runs once on client) -->
+<script is:inline async src="https://platform.quora.com/embed.js"></script>
+
+<style>
+  .quora-embed-container {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Styling reset to fit inside our responsive layout */
+  :global(.quora-embed-post) {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+</style>
