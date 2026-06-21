@@ -5,14 +5,16 @@ import sitemap from "@astrojs/sitemap"
 import tailwindcss from "@tailwindcss/vite"
 import keystatic from "@keystatic/astro"
 
+const isProd = process.env.NODE_ENV === "production"
+
 export default defineConfig({
   site: "https://snu.pages.dev",
   integrations: [
     react(),
     mdx(),
     sitemap(),
-    keystatic()
-  ],
+    !isProd && keystatic()
+  ].filter(Boolean),
   vite: {
     plugins: [tailwindcss()],
   },
