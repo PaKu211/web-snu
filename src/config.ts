@@ -19,33 +19,25 @@ export const NAV_LINKS = [
 
 // Taksonomi yang dikurasi untuk label & deskripsi yang manusiawi.
 export const TAG_META: Record<string, { label: string; description: string }> = {
-  niskala: {
-    label: "Niskala",
-    description: "Yang tak kasat mata — batin, makna, dan ruang spiritual.",
+  "wpm-saga": {
+    label: "WPM [SAGA]",
+    description: "Kisah-kisah fiksi fantasi gaib dan mistis.",
   },
-  sekala: {
-    label: "Sekala",
-    description: "Yang kasat mata — dunia nyata, alam, dan pengalaman badani.",
+  spiritual: {
+    label: "Spiritual",
+    description: "Renungan, pemikiran, dan laku kesadaran batin.",
   },
-  outbound: {
-    label: "Outbound",
-    description: "Catatan perjalanan dan petualangan di alam terbuka.",
+  misteri: {
+    label: "Misteri",
+    description: "Penelusuran kisah supernatural dan dunia tak kasat mata.",
   },
-  "english-hours": {
-    label: "English Hours",
-    description: "Tulisan dan latihan dalam Bahasa Inggris.",
+  snu: {
+    label: "SNU",
+    description: "Catatan dan rumor dari semesta Sekala Niskala Universe.",
   },
 }
 
 export const SERI_META: Record<string, { label: string; description: string }> = {
-  malming: {
-    label: "Malam Mingguan",
-    description: "Renungan ringan yang terbit tiap Sabtu malam.",
-  },
-  outbound: {
-    label: "Seri Outbound",
-    description: "Rangkaian kisah dari perjalanan ke alam bebas.",
-  },
   "wpm-saga": {
     label: "WPM [SAGA]",
     description: "Kisah fiksi fantasi mistis tentang Sakti, Bayu, dan perjalanan dimensi transisi.",
