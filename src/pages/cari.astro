@@ -19,7 +19,7 @@ import SearchBar from "@/components/SearchBar.astro"
       <SearchBar placeholder="Masukkan kata kunci pencarian..." />
 
       <!-- States -->
-      <div id="search-status" class="text-center text-sm text-[var(--color-muted)] hidden"></div>
+      <div id="search-status" aria-live="polite" role="status" class="text-center text-sm text-[var(--color-muted)] hidden"></div>
       
       <!-- Development warning if index not compiled -->
       <div id="dev-warning" class="hidden rounded-lg border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 p-4 text-xs text-[var(--color-accent)] max-w-xl mx-auto text-center leading-relaxed">

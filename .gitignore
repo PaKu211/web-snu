@@ -39,3 +39,5 @@ rad.json
 #Test results file
 TestResults.xml
 >>>>>>> 7489b32e00e8e667f899f9b8a7197cea922063cd
+.astro/
+dist/
