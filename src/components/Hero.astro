@@ -13,32 +13,40 @@ const {
 } = Astro.props
 ---
 
-<section class="relative overflow-hidden border-b border-[var(--color-border)]">
-  <div
-    class="pointer-events-none absolute inset-0 opacity-60"
-    aria-hidden="true"
-    style="background: radial-gradient(60% 80% at 50% -10%, color-mix(in oklch, var(--color-primary) 22%, transparent), transparent 70%);"
-  >
-  </div>
-  <div class="relative mx-auto max-w-5xl px-4 py-20 text-center sm:px-6 sm:py-28">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-primary)]">
-      {eyebrow}
-    </p>
-    <h1
-      class="mx-auto mt-5 max-w-3xl font-serif text-4xl font-semibold leading-tight text-balance sm:text-5xl"
-    >
-      {title}
-    </h1>
-    <p class="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted)] text-pretty sm:text-lg">
-      {subtitle}
-    </p>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-      <Button href="/artikel" variant="primary" size="md">
-        Baca Artikel
-      </Button>
-      <Button href="/tentang" variant="secondary" size="md">
-        Tentang Kami
-      </Button>
+<section class="relative min-h-[60vh] flex items-center overflow-hidden border-b border-[var(--color-border)] py-20 sm:py-28">
+  <!-- Drifting Ambient "Kabut Subuh" mesh glows defined in global.css -->
+  <div class="mesh-glow-1 pointer-events-none absolute -top-40 left-1/4 h-[500px] w-[500px] rounded-full bg-[var(--color-primary)]/10 blur-[120px]" aria-hidden="true"></div>
+  <div class="mesh-glow-2 pointer-events-none absolute -top-60 right-1/4 h-[600px] w-[600px] rounded-full bg-[var(--color-accent)]/8 blur-[150px]" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-5xl px-6 w-full">
+    <div class="max-w-3xl text-left">
+      <!-- Monospace Eyebrow Pill -->
+      <span class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/60 backdrop-blur-md px-3.5 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--color-primary)]">
+        <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" aria-hidden="true"></span>
+        {eyebrow}
+      </span>
+      
+      <!-- Editorial Serif Title -->
+      <h1
+        class="mt-6 font-serif text-5xl font-medium leading-[1.05] tracking-tight text-pretty sm:text-6xl md:text-7xl text-[var(--color-foreground)]"
+      >
+        {title}
+      </h1>
+      
+      <!-- Grotesque Lede Paragraph -->
+      <p class="mt-6 max-w-[52ch] text-base leading-relaxed text-[var(--color-muted)] sm:text-lg text-pretty">
+        {subtitle}
+      </p>
+      
+      <!-- CTA Action Pill & Ghost -->
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <Button href="/artikel" variant="primary" size="lg" hasArrow>
+          Baca Artikel
+        </Button>
+        <Button href="/tentang" variant="secondary" size="lg">
+          Tentang Kami
+        </Button>
+      </div>
     </div>
   </div>
 </section>

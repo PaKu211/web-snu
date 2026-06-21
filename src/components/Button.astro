@@ -8,6 +8,7 @@ interface Props extends HTMLAttributes<"button"> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "accent"
   size?: "sm" | "md" | "lg"
   class?: string
+  hasArrow?: boolean
 }
 
 const {
@@ -18,23 +19,24 @@ const {
   size = "md",
   class: className = "",
   type = "button",
+  hasArrow = false,
   ...rest
 } = Astro.props
 
-const baseStyles = "inline-flex items-center justify-center rounded-[var(--radius)] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] cursor-pointer"
+const baseStyles = "inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] cursor-pointer group"
 
 const variants = {
-  primary: "bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary)]/90 shadow-sm",
-  secondary: "bg-[var(--color-surface-2)] text-[var(--color-foreground)] border border-[var(--color-border)] hover:bg-[var(--color-surface)]",
-  outline: "border border-[var(--color-border)] bg-transparent text-[var(--color-foreground)] hover:bg-[var(--color-surface)]",
-  ghost: "text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-surface)]",
-  accent: "bg-[var(--color-accent)] text-[var(--color-accent-foreground)] hover:bg-[var(--color-accent)]/90 shadow-sm",
+  primary: "bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary)]/95 shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-[var(--color-primary)]/10",
+  secondary: "bg-[var(--color-surface-2)] text-[var(--color-foreground)] border border-[var(--color-border)] hover:bg-[var(--color-surface)]/80 hover:border-[var(--color-muted)]/30",
+  outline: "border border-[var(--color-border)] bg-transparent text-[var(--color-foreground)] hover:bg-[var(--color-surface-2)]/30",
+  ghost: "text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-surface-2)]/40",
+  accent: "bg-[var(--color-accent)] text-[var(--color-accent-foreground)] hover:bg-[var(--color-accent)]/95 shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-[var(--color-accent)]/10",
 }
 
 const sizes = {
-  sm: "h-8 px-3 text-xs gap-1.5",
-  md: "h-10 px-4 py-2 text-sm gap-2",
-  lg: "h-12 px-6 text-base gap-2.5",
+  sm: "h-9 px-4 text-xs gap-2",
+  md: "h-11 px-5 py-2.5 text-sm gap-2.5",
+  lg: "h-13 px-6 py-3.5 text-base gap-3",
 }
 
 const classes = [baseStyles, variants[variant], sizes[size], className].filter(Boolean).join(" ")
@@ -44,10 +46,26 @@ const classes = [baseStyles, variants[variant], sizes[size], className].filter(B
   href ? (
     <a href={href} target={target} rel={rel} class={classes} {...(rest as any)}>
       <slot />
+      {hasArrow && (
+        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-current/10 text-current transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:scale-105">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>
+      )}
     </a>
   ) : (
     <button type={type} class={classes} {...rest}>
       <slot />
+      {hasArrow && (
+        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-current/10 text-current transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:scale-105">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>
+      )}
     </button>
   )
 }

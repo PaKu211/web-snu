@@ -160,4 +160,33 @@
     background: transparent;
     padding: 0;
   }
+
+  /* Drifting ambient mesh animations */
+  @keyframes drift1 {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(60px, -40px, 0) scale(1.05); }
+  }
+  @keyframes drift2 {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(-50px, 50px, 0) scale(0.95); }
+  }
+
+  .mesh-glow-1 {
+    animation: drift1 20s cubic-bezier(0.32, 0.72, 0, 1) infinite alternate;
+  }
+  .mesh-glow-2 {
+    animation: drift2 24s cubic-bezier(0.32, 0.72, 0, 1) infinite alternate;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mesh-glow-1, .mesh-glow-2 {
+      animation: none;
+    }
+  }
+
+  /* Custom cubic-bezier transition utility classes */
+  .transition-premium {
+    transition-property: all;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  }
 }

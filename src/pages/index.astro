@@ -35,17 +35,17 @@ const bodies = Object.fromEntries(all.map((a) => [a.id, a.body ?? ""]))
     {
       tags.length > 0 && (
         <section class="mb-14" aria-labelledby="tags-heading">
-          <h2 id="tags-heading" class="mb-4 font-serif text-2xl font-semibold">
+          <h2 id="tags-heading" class="mb-5 font-serif text-2xl font-semibold">
             Telusuri Tema
           </h2>
           <div class="flex flex-wrap gap-2">
             {tags.map(({ tag, count }) => (
               <a
                 href={`/tag/${tag}`}
-                class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm font-medium transition-colors hover:border-[var(--color-primary)]"
+                class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)]/60 px-3.5 py-1.5 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-muted)] transition-all duration-300 hover:bg-[var(--color-surface-2)] hover:text-[var(--color-foreground)] hover:border-[var(--color-primary)]/40"
               >
                 #{tag}
-                <span class="text-xs text-[var(--color-muted)]">{count}</span>
+                <span class="text-[9px] font-sans font-semibold bg-[var(--color-surface)] border border-[var(--color-border)] px-1.5 py-0.5 rounded-full text-[var(--color-muted)] leading-none">{count}</span>
               </a>
             ))}
           </div>
