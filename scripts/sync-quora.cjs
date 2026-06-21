@@ -97,6 +97,14 @@ async function run() {
     // Wait an extra 5 seconds to ensure client-side React feed renders
     await new Promise(resolve => setTimeout(resolve, 5000));
 
+    const pageTitle = await page.title();
+    const bodyText = await page.evaluate(() => document.body.innerText);
+    console.log(`Halaman dimuat dengan judul: "${pageTitle}" (Panjang Teks: ${bodyText.length})`);
+    
+    if (bodyText.includes('Cloudflare') || pageTitle.includes('Cloudflare') || pageTitle.includes('Attention Required')) {
+      console.log('PERINGATAN: Diduga terblokir oleh proteksi Cloudflare.');
+    }
+
     // Extract post links from the page
     const postUrls = await page.evaluate(() => {
       const links = Array.from(document.querySelectorAll('a'));
