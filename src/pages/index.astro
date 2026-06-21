@@ -39,7 +39,7 @@ const upcomingEvents = allEvents
   <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6">
     {
       featured && (
-        <section class="mb-14" aria-labelledby="featured-heading">
+        <section class="mb-14 reveal-on-scroll" aria-labelledby="featured-heading">
           <div class="mb-5 flex items-baseline justify-between">
             <h2 id="featured-heading" class="font-serif text-2xl font-semibold">
               Disematkan
@@ -52,7 +52,7 @@ const upcomingEvents = allEvents
 
     {
       tags.length > 0 && (
-        <section class="mb-14" aria-labelledby="tags-heading">
+        <section class="mb-14 reveal-on-scroll" aria-labelledby="tags-heading">
           <h2 id="tags-heading" class="mb-5 font-serif text-2xl font-semibold">
             Telusuri Tema
           </h2>
@@ -73,7 +73,7 @@ const upcomingEvents = allEvents
 
     {
       upcomingEvents.length > 0 && (
-        <section class="mb-14" aria-labelledby="upcoming-events-heading">
+        <section class="mb-14 reveal-on-scroll" aria-labelledby="upcoming-events-heading">
           <div class="mb-5 flex items-baseline justify-between border-b border-[var(--color-border)]/30 pb-2">
             <h2 id="upcoming-events-heading" class="font-serif text-2xl font-semibold">
               Kegiatan Mendatang
@@ -91,7 +91,7 @@ const upcomingEvents = allEvents
       )
     }
 
-    <section aria-labelledby="latest-heading">
+    <section aria-labelledby="latest-heading" class="reveal-on-scroll">
       <div class="mb-5 flex items-baseline justify-between">
         <h2 id="latest-heading" class="font-serif text-2xl font-semibold">Tulisan Terbaru</h2>
         <Button href="/artikel" variant="ghost" size="sm" class="text-[var(--color-primary)] hover:text-[var(--color-primary)]/80">
@@ -138,7 +138,7 @@ const upcomingEvents = allEvents
     <!-- Quora Space Highlights Section -->
     {
       quoraArticles.length > 0 && (
-        <section class="mt-16 pt-8 border-t border-[var(--color-border)]/30" aria-labelledby="quora-heading">
+        <section class="mt-16 pt-8 border-t border-[var(--color-border)]/30 reveal-on-scroll" aria-labelledby="quora-heading">
           <div class="mb-6 flex items-baseline justify-between border-b border-[var(--color-border)]/30 pb-2">
             <h2 id="quora-heading" class="font-serif text-2xl font-semibold flex items-center gap-2 text-[var(--color-foreground)]">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-accent)]">
@@ -178,7 +178,7 @@ const upcomingEvents = allEvents
     }
 
     <!-- Community Call-To-Action Banner -->
-    <section class="mt-16 pt-8 border-t border-[var(--color-border)]/30" aria-labelledby="community-heading">
+    <section class="mt-16 pt-8 border-t border-[var(--color-border)]/30 reveal-on-scroll" aria-labelledby="community-heading">
       <CommunityBanner />
     </section>
   </div>
