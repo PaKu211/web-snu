@@ -1,0 +1,6 @@
+{
+  "name": "quora-sync",
+  "label": "Quora Sync",
+  "description": "Artikel yang disinkronkan otomatis dari Quora Space.",
+  "colorClass": "neutral"
+}
