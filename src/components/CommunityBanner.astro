@@ -1,5 +1,6 @@
 ---
 import Button from "@/components/Button.astro"
+import { QUORA_URL } from "@/config"
 
 interface Props {
   quoraUrl?: string
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const {
-  quoraUrl = "https://sekalaniskalauniverse.quora.com/",
+  quoraUrl = QUORA_URL,
   class: className = ""
 } = Astro.props
 ---

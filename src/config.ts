@@ -1,10 +1,11 @@
+import siteSettings from "./content/settings/site.json"
+
 export const SITE = {
-  name: "Sekala Niskala Universe",
-  shortName: "SNU",
-  title: "SEKALA NISKALA UNIVERSE — Dibatas nyata dan tak kasat",
-  description:
-    "Di sinilah kita berkumpul, dalam ekosistem dimana batas antara yang nyata dan yang tak terlihat menjadi kabur. Sejatinya SEKALA-NISKALA, adalah dua sisi kehidupan yang saling berjalin, membentuk tarian yang indah nan misterius, keduanya berdampingan dan saling melengkapi dengan kesadaran.",
-  url: "https://snu.pages.dev",
+  name: siteSettings.name,
+  shortName: siteSettings.shortName,
+  title: siteSettings.title,
+  description: siteSettings.description,
+  url: siteSettings.url,
   locale: "id-ID",
   defaultAuthor: "Komunitas SNU",
 } as const
@@ -44,6 +45,11 @@ export const SERI_META: Record<string, { label: string; description: string }> =
   },
 }
 
-// URL RSS Feed Quora (bisa diisi dengan link RSS yang dibuat dari generator gratis seperti rss.app)
-export const QUORA_RSS_FEED_URL = "https://politepaul.com/fd/mdwa5gNFMeXk.xml" // Ganti dengan RSS URL asli Anda
+export const QUORA_URL = siteSettings.quoraUrl
+export const QUORA_RSS_FEED_URL = siteSettings.rssUrl
+export const ANNOUNCEMENT = {
+  active: siteSettings.announcementActive,
+  text: siteSettings.announcementText,
+  link: siteSettings.announcementLink,
+}
 

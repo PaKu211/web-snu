@@ -1,5 +1,5 @@
 ---
-import { SITE } from "@/config"
+import { SITE, QUORA_URL } from "@/config"
 import Button from "@/components/Button.astro"
 
 interface Props {
@@ -69,7 +69,7 @@ const {
           Mulai Membaca
         </Button>
         <Button 
-          href="https://sekalaniskalauniverse.quora.com/" 
+          href={QUORA_URL} 
           target="_blank"
           rel="noopener noreferrer"
           variant="outline" 

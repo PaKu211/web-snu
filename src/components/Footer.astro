@@ -1,5 +1,5 @@
 ---
-import { NAV_LINKS, SITE } from "@/config"
+import { NAV_LINKS, SITE, QUORA_URL } from "@/config"
 import { Image } from "astro:assets"
 import logoImg from "@/assets/snlogo.png"
 const year = new Date().getFullYear()
@@ -50,7 +50,7 @@ const year = new Date().getFullYear()
         <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
           Media Sosial
         </h2>
-        <a href="https://sekalaniskalauniverse.quora.com/" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]">Quora Space</a>
+        <a href={QUORA_URL} target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]">Quora Space</a>
         <a href="https://instagram.com/sekalaniskala" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]">Instagram</a>
         <a href="https://threads.net/@sekalaniskala_u" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]">Threads</a>
       </nav>

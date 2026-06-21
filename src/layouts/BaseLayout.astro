@@ -1,6 +1,6 @@
 ---
 import "@/styles/global.css"
-import { SITE } from "@/config"
+import { SITE, ANNOUNCEMENT } from "@/config"
 import Navbar from "@/components/Navbar.astro"
 import Footer from "@/components/Footer.astro"
 
@@ -80,6 +80,22 @@ const ogImage = new URL(image, Astro.site ?? SITE.url).toString()
     <!-- Drifting Ambient glows for volumetric fog effect globally -->
     <div class="mesh-glow-1 pointer-events-none fixed top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[var(--color-accent)]/5 blur-[120px] -z-10" aria-hidden="true"></div>
     <div class="mesh-glow-2 pointer-events-none fixed bottom-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-[var(--color-primary)]/4 blur-[130px] -z-10" aria-hidden="true"></div>
+
+    {
+      ANNOUNCEMENT.active && (
+        <div class="bg-gradient-to-r from-[var(--color-accent)]/15 via-[var(--color-primary)]/15 to-[var(--color-accent)]/15 border-b border-[var(--color-border)]/40 py-2.5 px-4 text-center text-xs font-mono text-[var(--color-foreground)] relative z-50 flex items-center justify-center gap-2 group transition-colors hover:bg-gradient-to-r hover:from-[var(--color-accent)]/25 hover:via-[var(--color-primary)]/25 hover:to-[var(--color-accent)]/25">
+          <span class="inline-flex h-2 w-2 rounded-full bg-[var(--color-primary)] animate-pulse"></span>
+          {ANNOUNCEMENT.link ? (
+            <a href={ANNOUNCEMENT.link} class="hover:underline flex items-center gap-1">
+              <span>{ANNOUNCEMENT.text}</span>
+              <span class="transition-transform duration-300 group-hover:translate-x-0.5">&rarr;</span>
+            </a>
+          ) : (
+            <span>{ANNOUNCEMENT.text}</span>
+          )}
+        </div>
+      )
+    }
 
     <Navbar />
     <main class="flex-1 relative z-10">

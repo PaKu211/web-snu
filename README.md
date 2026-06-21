@@ -94,6 +94,22 @@ Halaman utama (Homepage) memiliki area khusus di bagian paling atas berlabel **"
    * Klik tombol **Save** di pojok kanan atas (atau **Publish/Create Commit**).
    * Perubahan akan tersimpan langsung ke repositori GitHub Anda dan live website akan terupdate otomatis dalam beberapa menit.
 
+### 4. Cara Mengubah Pengaturan Global Website (Site Settings & Ticker Banner)
+
+Kami menambahkan halaman **"Pengaturan Situs" (Global Settings)** di Keystatic CMS agar Anda dapat mengelola identitas web dan memasang pengumuman penting secara instan tanpa perlu menyentuh kode pemrograman:
+
+1. **Masuk ke Halaman Admin Keystatic:**
+   Akses `/keystatic` dan klik menu **Pengaturan Situs** di bagian bawah panel navigasi kiri (di bawah kolom *Singletons*).
+2. **Kelola Identitas & SEO:**
+   Anda dapat mengubah **Nama Website**, **Singkatan Nama**, **Judul SEO**, dan **Deskripsi SEO / Kaki Halaman (Footer)** secara instan.
+3. **Kelola Quora & RSS Sync:**
+   Anda dapat memperbarui **URL Quora Space** dan **URL RSS Feed Quora**. Script sinkronisasi otomatis akan langsung membaca URL RSS yang baru ini.
+4. **Memasang Banner Pengumuman Berjalan (Ticker Banner):**
+   * Centang opsi **Aktifkan Banner Pengumuman Berjalan (Ticker Banner)**.
+   * Isi kolom **Teks Pengumuman** (misal: *"Pendaftaran Kelas Meditasi Senin Weton telah dibuka! Hubungi admin."*).
+   * Isi kolom **Link Pengumuman (Opsional)** jika ingin mengarahkan pembaca ke halaman tertentu saat banner diklik (misal: `/events` atau `/artikel/announcement-kelas-meditasi-dan-kongkow-senin-weton-dan-keberadaan-makhluk-gaib`).
+   * Klik **Save** di pojok kanan atas. Banner pengumuman premium dengan indikator denyut neon akan otomatis tampil di atas menu navigasi seluruh halaman web Anda.
+
 ---
 
 ## 🔗 Panduan Menyematkan (Embed) Postingan Quora

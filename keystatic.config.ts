@@ -1,4 +1,4 @@
-import { config, collection, fields } from "@keystatic/core"
+import { config, collection, singleton, fields } from "@keystatic/core"
 
 export default config({
   storage: {
@@ -170,6 +170,29 @@ export default config({
           dividers: true,
           links: true,
         }),
+      },
+    }),
+  },
+  singletons: {
+    settings: singleton({
+      label: "Pengaturan Situs",
+      path: "src/content/settings/site",
+      format: { data: "json" },
+      schema: {
+        name: fields.text({ label: "Nama Website", validation: { isRequired: true } }),
+        shortName: fields.text({ label: "Singkatan Nama", validation: { isRequired: true } }),
+        title: fields.text({ label: "Judul SEO", validation: { isRequired: true } }),
+        description: fields.text({
+          label: "Deskripsi SEO / Footer",
+          multiline: true,
+          validation: { isRequired: true },
+        }),
+        url: fields.text({ label: "URL Website", validation: { isRequired: true } }),
+        quoraUrl: fields.text({ label: "URL Quora Space", validation: { isRequired: true } }),
+        rssUrl: fields.text({ label: "URL RSS Feed Quora (Untuk Scraper)", validation: { isRequired: true } }),
+        announcementActive: fields.checkbox({ label: "Aktifkan Banner Pengumuman Berjalan (Ticker Banner)", defaultValue: false }),
+        announcementText: fields.text({ label: "Teks Pengumuman", defaultValue: "" }),
+        announcementLink: fields.text({ label: "Link Pengumuman (Opsional)", defaultValue: "" }),
       },
     }),
   },
