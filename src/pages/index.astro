@@ -8,15 +8,18 @@ import TagBadge from "@/components/TagBadge.astro"
 import Button from "@/components/Button.astro"
 import EventCard from "@/components/EventCard.astro"
 import CommunityBanner from "@/components/CommunityBanner.astro"
-import { collectTags, sortArtikel } from "@/lib/utils"
+import { collectTags, sortArtikel, formatDate } from "@/lib/utils"
 
 const all = sortArtikel(await getCollection("artikel"))
-const nonQuora = all.filter((a) => !a.data.tags?.includes("quora-sync"))
-const featured = nonQuora.find((a) => a.data.featured) ?? nonQuora[0] ?? all[0]
-const rest = all.filter((a) => a.id !== featured?.id && !a.data.tags?.includes("quora-sync")).slice(0, 5)
+const featured = all.find((a) => a.data.featured) ?? all[0]
+const rest = all.filter((a) => a.id !== featured?.id).slice(0, 6)
 const tags = collectTags(all).slice(0, 8)
 
 const quoraArticles = all.filter((a) => a.data.tags?.includes("quora-sync")).slice(0, 3)
+
+// Helper to format slugified author names
+const formatAuthor = (name: string) => 
+  name ? name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "Anonim"
 
 // Retrieve upcoming events
 const allEvents = await getCollection("events", ({ data }) => import.meta.env.DEV || !data.draft)
@@ -164,7 +167,7 @@ const upcomingEvents = allEvents
                   <p class="text-xs text-[var(--color-muted)] mt-2 leading-relaxed line-clamp-3">{post.data.description}</p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-[var(--color-border)]/20 flex items-center justify-between text-[10px] font-mono text-[var(--color-muted)]">
-                  <span>Oleh: Lovelie Light</span>
+                  <span>Oleh: {formatAuthor(post.data.author)} • {formatDate(post.data.publishDate)}</span>
                   <a href={`/artikel/${post.id}`} class="text-[var(--color-accent)] hover:underline font-semibold">Baca &rarr;</a>
                 </div>
               </div>

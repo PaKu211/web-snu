@@ -74,6 +74,26 @@ Saat membuat artikel baru di Keystatic, harap lengkapi kolom berikut:
 8. **Cover Image:** Unggah gambar sampul (format JPG/PNG/WebP). Gambar ini otomatis dikompresi oleh Astro untuk performa LCP yang cepat.
 9. **Draft:** Centang ini jika artikel masih dalam tahap penyusunan dan belum ingin dipublikasikan di live website.
 
+### 3. Cara Mengubah Artikel yang Disematkan (Disematkan / Featured Article)
+
+Halaman utama (Homepage) memiliki area khusus di bagian paling atas berlabel **"Disematkan"** untuk menampilkan satu artikel utama pilihan Anda secara premium. Untuk mengubah artikel tersebut secara mandiri:
+
+1. **Masuk ke Halaman Admin Keystatic:**
+   Akses `/keystatic` (lokal: `http://localhost:4321/keystatic` atau live website: `https://domain-anda.com/keystatic`).
+2. **Buka Artikel Pilihan:**
+   * Klik menu **Artikel** di panel sebelah kiri.
+   * Cari dan klik judul artikel yang ingin Anda tampilkan di bagian teratas.
+3. **Aktifkan Opsi Disematkan:**
+   * Gulir ke bawah hingga Anda melihat kolom **Disematkan (Featured)** (berupa kotak centang / checkbox).
+   * Klik kotak centang tersebut hingga tercentang (aktif).
+4. **Aturan Prioritas Sistem:**
+   * Website diprogram untuk menampilkan **satu** artikel utama di bagian "Disematkan".
+   * Jika ada **lebih dari satu** artikel yang dicentang "Disematkan", sistem secara otomatis memprioritaskan artikel dengan **Tanggal Terbit terbaru** untuk ditampilkan di sana.
+   * Jika **tidak ada** artikel yang dicentang "Disematkan", sistem akan secara otomatis menampilkan artikel paling baru secara default. Oleh karena itu, sangat disarankan untuk masuk ke artikel lama yang sebelumnya disematkan, lalu menghilangkan centang tersebut agar tertata rapi.
+5. **Simpan Perubahan:**
+   * Klik tombol **Save** di pojok kanan atas (atau **Publish/Create Commit**).
+   * Perubahan akan tersimpan langsung ke repositori GitHub Anda dan live website akan terupdate otomatis dalam beberapa menit.
+
 ---
 
 ## 🔗 Panduan Menyematkan (Embed) Postingan Quora
