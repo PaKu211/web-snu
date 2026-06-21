@@ -46,4 +46,8 @@ export const SERI_META: Record<string, { label: string; description: string }> =
     label: "Seri Outbound",
     description: "Rangkaian kisah dari perjalanan ke alam bebas.",
   },
+  "wpm-saga": {
+    label: "WPM [SAGA]",
+    description: "Kisah fiksi fantasi mistis tentang Sakti, Bayu, dan perjalanan dimensi transisi.",
+  },
 }
