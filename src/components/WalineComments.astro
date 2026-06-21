@@ -92,7 +92,9 @@ const serverURL = import.meta.env.PUBLIC_WALINE_SERVER_URL || "https://sekala-ni
     if (!container || !el || typeof Waline === 'undefined') return;
 
     const serverURL = container.dataset.serverUrl;
-    const path = container.dataset.path || window.location.pathname;
+    const rawPath = container.dataset.path || window.location.pathname;
+    // Prefix path to prevent comment collision on shared Waline servers
+    const path = 'snu:' + rawPath;
 
     if (!serverURL) {
       console.warn("Waline comments: serverURL is missing.");
