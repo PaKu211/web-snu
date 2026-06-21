@@ -220,6 +220,9 @@ const finalCover = cover || fallbackCovers[entry.id.charCodeAt(0) % fallbackCove
       // --- TEXT SIZE ---
       const sizeClasses = ['prose-sm', 'prose-base', 'prose-lg', 'prose-xl', 'prose-2xl'];
       let currentSizeIndex = parseInt(localStorage.getItem('preferred-prose-size-index') ?? '2');
+      if (isNaN(currentSizeIndex) || currentSizeIndex < 0 || currentSizeIndex >= sizeClasses.length) {
+        currentSizeIndex = 2;
+      }
 
       function updateSize() {
         sizeClasses.forEach(c => prose.classList.remove(c));
@@ -262,6 +265,9 @@ const finalCover = cover || fallbackCovers[entry.id.charCodeAt(0) % fallbackCove
       // --- FONT FAMILY ---
       const fontClasses = ['prose-font-serif', 'prose-font-sans', 'prose-font-mono'];
       let currentFont = localStorage.getItem('preferred-prose-font') ?? 'serif';
+      if (currentFont !== 'serif' && currentFont !== 'sans' && currentFont !== 'mono') {
+        currentFont = 'serif';
+      }
 
       function updateFont() {
         fontClasses.forEach(c => prose.classList.remove(c));

@@ -92,9 +92,9 @@
   .prose {
     color: var(--color-foreground);
     line-height: 1.7;
+    font-family: var(--font-serif);
   }
   .prose h2 {
-    font-family: var(--font-serif);
     font-size: 1.5em;
     font-weight: 600;
     margin-top: 2.5rem;
@@ -102,7 +102,6 @@
     scroll-margin-top: 6rem;
   }
   .prose h3 {
-    font-family: var(--font-serif);
     font-size: 1.2em;
     font-weight: 600;
     margin-top: 2rem;
