@@ -9,7 +9,7 @@ async function test() {
   console.log('Memulai CloakBrowser...');
   try {
     const browser = await launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     console.log('Browser berhasil diluncurkan. Membuka tab baru...');
