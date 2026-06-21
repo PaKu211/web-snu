@@ -74,6 +74,7 @@ const finalCover = cover || fallbackCovers[entry.id.charCodeAt(0) % fallbackCove
         <Image
           src={finalCover}
           alt={`Ilustrasi untuk artikel ${title}`}
+          loading="eager"
           widths={[480, 768, 1200]}
           sizes="(min-width: 768px) 768px, 100vw"
           class="mb-10 aspect-[21/9] w-full rounded-[var(--radius-lg)] object-cover shadow-[0_8px_24px_rgba(0,0,0,0.5)] border border-[var(--color-border)]/20"

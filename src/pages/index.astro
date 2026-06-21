@@ -40,7 +40,7 @@ const upcomingEvents = allEvents
               Disematkan
             </h2>
           </div>
-          <ArticleCard entry={featured} body={bodies[featured.id]} featured />
+          <ArticleCard entry={featured} body={bodies[featured.id]} featured loading="eager" />
         </section>
       )
     }
