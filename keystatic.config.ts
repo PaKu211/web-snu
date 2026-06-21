@@ -26,20 +26,15 @@ export default config({
           directory: "public/images/artikel",
           publicPath: "/images/artikel/",
         }),
-        tags: fields.array(fields.text({ label: "Tag" }), {
+        tags: fields.multiRelationship({
           label: "Tags",
-          itemLabel: (props) => props.value || "Tag baru",
+          description: "Pilih tag yang relevan. Tag baru bisa dibuat di koleksi Tags.",
+          collection: "tags",
         }),
-        seri: fields.select({
+        seri: fields.relationship({
           label: "Seri",
-          options: [
-            { label: "Tidak Ada", value: "" },
-            { label: "WPM [SAGA]", value: "wpm-saga" },
-            { label: "Malam Mingguan (malming)", value: "malming" },
-            { label: "Seri Outbound (outbound)", value: "outbound" },
-            { label: "Arktalk (arktalk)", value: "arktalk" },
-          ],
-          defaultValue: "",
+          description: "Pilih seri tulisan (opsional). Seri baru bisa ditambah di koleksi Seri.",
+          collection: "seri",
         }),
         featured: fields.checkbox({ label: "Disematkan (Featured)", defaultValue: false }),
         draft: fields.checkbox({ label: "Draf", defaultValue: false }),
@@ -177,8 +172,10 @@ export default config({
       path: "src/content/tags/*",
       format: { data: "json" },
       slugField: "name",
+      entryLayout: "form",
+      columns: ["name", "label"],
       schema: {
-        name: fields.text({ label: "ID Tag (Lowercase, e.g. spiritual)", validation: { isRequired: true } }),
+        name: fields.text({ label: "ID Tag (slug, e.g. spiritual)", validation: { isRequired: true } }),
         label: fields.text({ label: "Label Tampilan Tag (e.g. Spiritual)", validation: { isRequired: true } }),
         description: fields.text({ label: "Deskripsi Singkat" }),
         colorClass: fields.select({
@@ -199,8 +196,10 @@ export default config({
       path: "src/content/seri/*",
       format: { data: "json" },
       slugField: "name",
+      entryLayout: "form",
+      columns: ["name", "label"],
       schema: {
-        name: fields.text({ label: "ID Seri (Lowercase, e.g. wpm-saga)", validation: { isRequired: true } }),
+        name: fields.text({ label: "ID Seri (slug, e.g. wpm-saga)", validation: { isRequired: true } }),
         label: fields.text({ label: "Label Tampilan Seri", validation: { isRequired: true } }),
         description: fields.text({ label: "Deskripsi Seri" }),
       }
