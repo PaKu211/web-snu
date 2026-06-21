@@ -24,6 +24,24 @@ function cleanDescription(html) {
   return text.slice(0, 150) + (text.length > 150 ? '...' : '');
 }
 
+// MDX requires all void elements like <img>, <br>, <hr> to be self-closed
+function makeMdxSafe(html) {
+  if (!html) return '';
+  return html
+    // Remove existing self-closing slashes temporarily to prevent duplicate slashes, then add them back cleanly
+    .replace(/<img([^>]*)\/>/g, '<img$1>')
+    .replace(/<img([^>]*)>/g, '<img$1 />')
+    
+    .replace(/<br([^>]*)\/>/g, '<br$1>')
+    .replace(/<br([^>]*)>/g, '<br$1 />')
+    
+    .replace(/<hr([^>]*)\/>/g, '<hr$1>')
+    .replace(/<hr([^>]*)>/g, '<hr$1 />')
+    
+    // Remove any HTML comments
+    .replace(/<!--[\s\S]*?-->/g, '');
+}
+
 async function run() {
   console.log('Memulai browser virtual untuk menyinkronkan Quora Space...');
   
@@ -129,7 +147,6 @@ async function run() {
 
         if (!title || !postData.contentHtml) {
           console.log(`[Terlewati] Gagal mengekstrak judul atau konten.`);
-          await newPage.close();
           continue;
         }
 
@@ -148,7 +165,6 @@ async function run() {
 
         if (exists && !isTruncated) {
           console.log(`[Terlewati] Artikel sudah ada dan lengkap: ${title}`);
-          await newPage.close();
           continue;
         }
 
@@ -205,6 +221,7 @@ async function run() {
         }
 
         const descriptionText = cleanDescription(postData.contentHtml);
+        const safeHtml = makeMdxSafe(postData.contentHtml);
 
         const mdxContent = `---
 title: "${title.replace(/"/g, '\\"')}"
@@ -216,7 +233,7 @@ sourceUrl: "${postUrl}"
 ${coverPath ? `cover: "${coverPath}"` : ''}
 ---
 
-${postData.contentHtml}
+${safeHtml}
 `;
 
         fs.writeFileSync(filePath, mdxContent, 'utf8');
