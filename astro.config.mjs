@@ -8,7 +8,7 @@ import keystatic from "@keystatic/astro"
 const isProd = process.env.NODE_ENV === "production"
 
 export default defineConfig({
-  site: "https://<username-github-kamu>.github.io",
+  site: "https://PaKu211.github.io",
   base: '/web-snu',
   prefetch: {
     prefetchAll: true,
