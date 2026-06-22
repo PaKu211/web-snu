@@ -5,7 +5,7 @@ export default config({
     // MENGGUNAKAN FITUR BAWAAN ASTRO YANG COMPATIBLE DENGAN CLOUDFLARE
     kind: import.meta.env.PROD ? "github" : "local",
     repo: {
-      owner: "PaKu211",
+      owner: import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO_OWNER || "PaKu211",
       name: "web-snu",
     },
   },
