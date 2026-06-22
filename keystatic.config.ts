@@ -3,7 +3,7 @@ import { config, collection, singleton, fields } from "@keystatic/core"
 export default config({
   storage: {
     // MENGGUNAKAN FITUR BAWAAN ASTRO YANG COMPATIBLE DENGAN CLOUDFLARE
-    kind: import.meta.env.PROD ? "github" : "local",
+    kind:"github",
     repo: {
       owner: import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO_OWNER || "PaKu211",
       name: "web-snu",
