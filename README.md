@@ -137,21 +137,51 @@ Kami telah mengimplementasikan 3 fitur baru yang canggih di Keystatic CMS, namun
 
 ---
 
-## 🔗 Panduan Menyematkan (Embed) Postingan Quora
+## 🔗 Panduan Menyematkan (Embed) Postingan Quora (Via Keystatic Editor)
 
-Karena anggota komunitas masih aktif menulis di Quora Space Sekala Niskala, Anda dapat menyisipkan postingan Quora pilihan ke dalam badan artikel Markdown (`.mdx`) secara estetik.
+Anda dapat menyisipkan postingan Quora pilihan ke dalam badan artikel secara visual langsung melalui editor Keystatic tanpa perlu menulis kode `import` manual (menulis manual akan menyebabkan kegagalan validasi parser Keystatic).
 
-### Cara Menggunakan Komponen `<QuoraEmbed />`
-Di bagian paling bawah/atas artikel Keystatic, atau langsung di dalam file `.mdx`, Anda dapat menuliskan kode berikut:
+### Cara Menggunakan:
+1. Saat sedang menulis/mengedit artikel di dasbor Keystatic CMS, klik tombol tambah blok (ikon plus `+` di editor atau tekan tombol `/` di baris baru).
+2. Pilih opsi **Quora Embed** dari daftar komponen.
+3. Masukkan **Quora Post URL** yang ingin Anda sematkan (misal: `https://sekalaniskalauniverse.quora.com/...`).
+4. Klik simpan. Keystatic akan otomatis menyusun kode MDX `<QuoraEmbed url="..." />` di balik layar secara aman dan bersih!
 
-```mdx
-import QuoraEmbed from "@/components/QuoraEmbed.astro"
+---
 
-<QuoraEmbed url="https://sekalaniskalauniverse.quora.com/Judul-Postingan-Anda" />
-```
+## ⚙️ Cetak Biru Deployment Cloudflare Pages & Sistem Aliran Fork (Opsi A)
 
-* **url (Wajib):** Tautan url postingan lengkap dari Quora Space Anda.
-* **embedId (Opsional):** Jika Anda menyalin kode embed resmi dari Quora (lewat tombol titik tiga `...` > *Embed Post*), Anda bisa memasukkan kode ID-nya saja ke dalam parameter `embedId` (misal: `embedId="p8Q5rXJ8c6"`).
+Untuk menayangkan website secara instan saat Anda menyimpan tulisan di Keystatic online, kami menggunakan arsitektur **Cloudflare Pages + GitHub Fork**.
+
+### 1. Variabel Lingkungan (Environment Variables) di Cloudflare Pages
+Pastikan Anda memasukkan variabel berikut di dashboard **Cloudflare Pages -> web-snu -> Settings -> Environment variables**:
+
+*   **`KEYSTATIC_GITHUB_CLIENT_ID`**: ID Klien GitHub App Anda (`Iv23liMC5P3F2ykBDV15`).
+*   **`KEYSTATIC_GITHUB_CLIENT_SECRET`**: Kunci Rahasia GitHub App Anda.
+*   **`KEYSTATIC_SECRET`**: Kunci sesi enkripsi acak Anda.
+*   **`PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`**: Nama slug GitHub App Anda (`web-snu`).
+*   **`PUBLIC_KEYSTATIC_GITHUB_REPO_OWNER`**: Username akun GitHub kedua Anda (pemilik repositori fork, misal: `Irham-ridwan`). *Variabel ini menginstruksikan Keystatic untuk melakukan commit artikel langsung ke repositori fork akun kedua Anda.*
+
+### 2. Alur Penulisan & Penerbitan Otomatis (Opsi A)
+1. **Menulis**: Anda membuka `/keystatic` di website online Anda, masuk menggunakan akun GitHub, lalu menulis artikel.
+2. **Commit Otomatis**: Keystatic menggunakan GitHub App akun utama Anda untuk membuat commit tulisan baru **langsung ke repositori fork akun kedua Anda** (`Irham-ridwan/web-snu`).
+3. **Deploy Instan**: Cloudflare Pages yang memantau repositori fork akan mendeteksi commit tersebut dan langsung melakukan build serta memperbarui situs web online dalam hitungan detik.
+
+---
+
+## 🔒 Keamanan & Alur Kolaborator Penulis Komunitas
+
+Dasbor admin online Keystatic (`/keystatic`) dilindungi sepenuhnya menggunakan otorisasi repositori GitHub untuk mencegah diakses oleh publik secara ilegal.
+
+### Apakah Aman dari Akses Umum?
+**Sangat aman (100%)**. Hanya akun GitHub yang terdaftar sebagai **Collaborator dengan akses Write** pada repositori target (`Irham-ridwan/web-snu`) yang diizinkan oleh sistem untuk masuk dan mengedit dasbor Keystatic. Jika orang asing masuk, mereka akan langsung ditolak aksesnya oleh Keystatic.
+
+### Alur Mengajak Penulis Komunitas Baru:
+1. Dapatkan username akun GitHub kontributor baru Anda.
+2. Buka halaman repositori fork Anda di GitHub (`https://github.com/Irham-ridwan/web-snu`).
+3. Masuk ke menu **Settings** -> **Collaborators** -> Klik **Add people**.
+4. Masukkan username kontributor tersebut dan beri mereka role akses **Write**.
+5. Setelah kontributor tersebut menerima undangan kolaborasi di emailnya, mereka dapat langsung mengakses `https://web-snu.pages.dev/keystatic`, login menggunakan akun GitHub mereka sendiri, dan langsung mulai menulis artikel. Setiap tulisan yang mereka simpan akan ter-commit atas nama mereka sendiri ke repositori fork dan langsung tayang secara otomatis di Cloudflare!
 
 ---
 
