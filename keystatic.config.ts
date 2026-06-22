@@ -1,4 +1,5 @@
 import { config, collection, singleton, fields } from "@keystatic/core"
+import { block } from "@keystatic/core/content-components"
 
 export default config({
   storage: {
@@ -74,6 +75,20 @@ export default config({
             directory: "public/images/artikel",
             publicPath: "/images/artikel/",
           },
+          components: {
+            QuoraEmbed: block({
+              label: "Quora Embed",
+              schema: {
+                url: fields.text({
+                  label: "Quora Post URL",
+                  validation: { isRequired: true }
+                }),
+                embedId: fields.text({
+                  label: "Embed ID (Opsional)"
+                })
+              }
+            })
+          }
         }),
       },
     }),

@@ -4,6 +4,7 @@ import { getCollection, render } from "astro:content"
 import type { CollectionEntry } from "astro:content"
 import ArticleLayout from "@/layouts/ArticleLayout.astro"
 import { relatedArtikel, sortArtikel } from "@/lib/utils"
+import QuoraEmbed from "@/components/QuoraEmbed.astro"
 
 export const getStaticPaths = (async () => {
   const all = (await getCollection("artikel")).filter(
@@ -26,5 +27,5 @@ const related = relatedArtikel(entry, all)
 ---
 
 <ArticleLayout entry={entry} headings={headings} rawBody={entry.body ?? ""} related={related}>
-  <Content />
+  <Content components={{ QuoraEmbed }} />
 </ArticleLayout>
