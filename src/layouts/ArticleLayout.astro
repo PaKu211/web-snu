@@ -33,7 +33,10 @@ const finalCover = cover
 <BaseLayout title={title} description={description} type="article" image={cover ? undefined : "/og-default.png"}>
   <ReadingProgress />
 
-  <div class="mx-auto max-w-4xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
+  <div class:list={[
+    "mx-auto px-4 pb-24 pt-12 sm:px-6 lg:px-8",
+    toc.length > 0 ? "max-w-5xl" : "max-w-3xl"
+  ]}>
     <!-- Breadcrumb with a fade-in delay -->
     <div class="reveal-on-scroll">
       <Breadcrumb items={[{ label: "Artikel", href: "/artikel" }, { label: title }]} />
@@ -213,9 +216,12 @@ const finalCover = cover
     }
 
     <!-- Content Split Layout -->
-    <div class="lg:grid lg:grid-cols-[1fr_240px] lg:gap-14 reveal-on-scroll">
+    <div class:list={[
+      "reveal-on-scroll",
+      toc.length > 0 && "lg:grid lg:grid-cols-[1fr_240px] lg:gap-14"
+    ]}>
       <!-- Main Article Content Body -->
-      <article class="prose min-w-0 max-w-none leading-relaxed tracking-wide text-justify text-[var(--color-foreground)]">
+      <article class="prose min-w-0 max-w-none leading-relaxed tracking-wide text-[var(--color-foreground)]">
         <slot />
       </article>
 
