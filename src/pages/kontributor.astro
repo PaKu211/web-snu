@@ -30,7 +30,7 @@ const sortedKontributor = kontributorList.sort((a, b) => a.data.order - b.data.o
                 <div>
                   <div class="relative mb-5 flex justify-center">
                     <div class="relative h-24 w-24 overflow-hidden rounded-full border-2 border-[var(--color-border)]/60 transition-colors duration-500 group-hover:border-[var(--color-primary)]">
-                      {avatar ? (
+                      {avatar && typeof avatar === "object" ? (
                         <Image
                           src={avatar}
                           alt={`Foto profil ${name}`}
