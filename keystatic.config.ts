@@ -26,6 +26,7 @@ export default config({
         cover: fields.image({
           label: "Gambar Sampul (Cover)",
           directory: "public/images/artikel",
+          publicPath: "../../../public/images/artikel/",
         }),
         tags: fields.multiRelationship({
           label: "Tags",
@@ -106,6 +107,7 @@ export default config({
         cover: fields.image({
           label: "Gambar Sampul (Cover)",
           directory: "public/images/events",
+          publicPath: "../../../public/images/events/",
         }),
         draft: fields.checkbox({ label: "Draf", defaultValue: false }),
         content: fields.markdoc({
@@ -159,6 +161,7 @@ export default config({
         avatar: fields.image({
           label: "Foto Profil",
           directory: "public/images/kontributor",
+          publicPath: "../../../public/images/kontributor/",
         }),
         order: fields.number({ label: "Urutan Tampilan", defaultValue: 99 }),
         socials: fields.array(
@@ -232,6 +235,7 @@ export default config({
             image: fields.image({
               label: "Foto",
               directory: "public/images/gallery",
+              publicPath: "../../../public/images/gallery/",
             }),
             caption: fields.text({ label: "Keterangan Foto" })
           }),
