@@ -10,24 +10,40 @@ const {
 } = Astro.props
 ---
 
-<!-- Start of Tawk.to Script -->
+<!-- Optimized Non-blocking Tawk.to Script -->
 <script is:inline define:vars={{ propertyId, widgetId }}>
-  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
   (function () {
     if (window.__tawk_initialized) return;
-    window.__tawk_initialized = true;
 
-    var s1 = document.createElement("script"),
-      s0 = document.getElementsByTagName("script")[0];
-    s1.async = true;
-    s1.src = `https://embed.tawk.to/${propertyId}/${widgetId}`;
-    s1.charset = "UTF-8";
-    s1.setAttribute("crossorigin", "*");
-    if (s0 && s0.parentNode) {
-      s0.parentNode.insertBefore(s1, s0);
-    } else {
-      document.head.appendChild(s1);
+    function initTawk() {
+      if (window.__tawk_initialized) return;
+      window.__tawk_initialized = true;
+
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_LoadStart = new Date();
+
+      var s1 = document.createElement("script"),
+        s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = `https://embed.tawk.to/${propertyId}/${widgetId}`;
+      s1.charset = "UTF-8";
+      s1.setAttribute("crossorigin", "*");
+      if (s0 && s0.parentNode) {
+        s0.parentNode.insertBefore(s1, s0);
+      } else {
+        document.head.appendChild(s1);
+      }
     }
+
+    // Load after main thread is idle or on first user interaction for instant initial paint
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(initTawk, { timeout: 2500 });
+    } else {
+      setTimeout(initTawk, 1500);
+    }
+
+    ["scroll", "touchstart", "mousemove"].forEach(function (event) {
+      window.addEventListener(event, initTawk, { once: true, passive: true });
+    });
   })();
 </script>
-<!-- End of Tawk.to Script -->

@@ -1,0 +1,24 @@
+# Cloudflare Pages Custom Caching & Performance Headers
+
+# Static hashed assets produced by Astro (safe to cache forever)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+# Images in public directory
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  X-Content-Type-Options: nosniff
+
+/hero_bg.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/snlogo.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+# HTML documents (always revalidate to ensure freshest content)
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
