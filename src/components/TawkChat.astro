@@ -1,0 +1,33 @@
+---
+interface Props {
+  propertyId?: string
+  widgetId?: string
+}
+
+const {
+  propertyId = import.meta.env.PUBLIC_TAWKTO_PROPERTY_ID || "6a89b3eddf6d0434484b9a74",
+  widgetId = import.meta.env.PUBLIC_TAWKTO_WIDGET_ID || "1k0kudmse",
+} = Astro.props
+---
+
+<!-- Start of Tawk.to Script -->
+<script is:inline define:vars={{ propertyId, widgetId }}>
+  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+  (function () {
+    if (window.__tawk_initialized) return;
+    window.__tawk_initialized = true;
+
+    var s1 = document.createElement("script"),
+      s0 = document.getElementsByTagName("script")[0];
+    s1.async = true;
+    s1.src = `https://embed.tawk.to/${propertyId}/${widgetId}`;
+    s1.charset = "UTF-8";
+    s1.setAttribute("crossorigin", "*");
+    if (s0 && s0.parentNode) {
+      s0.parentNode.insertBefore(s1, s0);
+    } else {
+      document.head.appendChild(s1);
+    }
+  })();
+</script>
+<!-- End of Tawk.to Script -->

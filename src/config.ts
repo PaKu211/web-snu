@@ -89,3 +89,8 @@ export const ANNOUNCEMENT = {
   link: siteSettings.announcementLink,
 }
 
+export const TAWK_CONFIG = {
+  propertyId: (siteSettings as any).tawkPropertyId || "",
+  widgetId: (siteSettings as any).tawkWidgetId || "default",
+}
+

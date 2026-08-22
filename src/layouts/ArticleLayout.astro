@@ -9,7 +9,6 @@ import RelatedArticles from "@/components/RelatedArticles.astro"
 import ReadingProgress from "@/components/ReadingProgress.astro"
 import TagBadge from "@/components/TagBadge.astro"
 import SeriBadge from "@/components/SeriBadge.astro"
-import WalineComments from "@/components/WalineComments.astro"
 import { buildToc, readingTime } from "@/lib/utils"
 import type { TocItem } from "@/lib/utils"
 import coverTemple from "@/assets/cover_temple.jpg"
@@ -265,11 +264,6 @@ const finalCover = cover
         </div>
       )
     }
-
-    <!-- Premium Nested Waline Comments Section -->
-    <div class="mt-16 reveal-on-scroll">
-      <WalineComments path={`/artikel/${entry.id}`} />
-    </div>
 
     <!-- Related articles -->
     <div class="reveal-on-scroll">

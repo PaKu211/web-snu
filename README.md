@@ -231,20 +231,20 @@ Kami telah menyediakan script otomatisasi menggunakan **Puppeteer** untuk menyin
 
 ---
 
-## 💬 Konfigurasi Kolom Komentar (Waline)
+## 💬 Konfigurasi Live Chat (Tawk.to)
 
-Kami menggunakan **Waline** untuk sistem komentar karena mendukung login umum, emoji, markdown, dan notifikasi tanpa memerlukan server berbayar.
+Portal ini terintegrasi dengan widget live chat mengambang **Tawk.to** di sudut kanan bawah.
 
-### Menggunakan Server Waline Bersama (Shared Server)
-Sistem komentar Sekala Niskala telah diprogram agar tidak bentrok dengan website lain meskipun Anda menggunakan 1 server Waline yang sama. Semua data komentar akan diberi prefix khusus `snu:` di database Anda.
-
-### Cara Menghubungkan ke Server Waline Anda:
-1. Buka file `.env` di root proyek (atau buat file `.env` baru jika belum ada).
-2. Masukkan URL server Waline Anda:
-   ```env
-   PUBLIC_WALINE_SERVER_URL=https://nama-server-waline-anda.vercel.app
-   ```
-3. Saat website di-deploy, fitur komentar akan langsung aktif dan terhubung ke database Anda.
+### Cara Menghubungkan Tawk.to:
+1. Dapatkan **Property ID** dan **Widget ID** dari akun [Tawk.to](https://dashboard.tawk.to/) Anda (di menu *Administration > Channels > Chat Widget*).
+2. Anda dapat mengaturnya melalui salah satu dari dua cara berikut:
+   * **Lewat Keystatic CMS:** Masuk ke `/keystatic` > **Pengaturan Situs** > isi **Tawk.to Property ID** dan **Widget ID**.
+   * **Lewat Environment Variable (.env / Cloudflare Pages):**
+     ```env
+     PUBLIC_TAWKTO_PROPERTY_ID=64a1234567890abcdef12345
+     PUBLIC_TAWKTO_WIDGET_ID=1h1234567
+     ```
+3. Widget chat akan otomatis aktif dan mengambang di pojok kanan bawah di seluruh halaman website.
 
 ---
 

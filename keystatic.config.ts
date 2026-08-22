@@ -294,6 +294,8 @@ export default config({
         enableDynamicSeri: fields.checkbox({ label: "Aktifkan Pengelolaan Seri Dinamis (On/Off)", defaultValue: false }),
         enableGallery: fields.checkbox({ label: "Aktifkan Fitur Galeri Dokumentasi (On/Off)", defaultValue: false }),
         enableCustomPages: fields.checkbox({ label: "Aktifkan Fitur Halaman Statis Kustom (On/Off)", defaultValue: false }),
+        tawkPropertyId: fields.text({ label: "Tawk.to Property ID (e.g. 64a...)", description: "Dapatkan dari dashboard Tawk.to > Administration > Chat Widget" }),
+        tawkWidgetId: fields.text({ label: "Tawk.to Widget ID (Default: default)", defaultValue: "default" }),
       },
     }),
   },
