@@ -77,7 +77,7 @@ function parseQuoraDate(dateStr, baseDate = new Date()) {
     return d.toISOString().split('T')[0];
   }
 
-  // Handle day names like "Sab", "Jum", "Sat", "Fri" (relative to current week)
+  // Handle day names
   const daysMap = {
     min: 0, minggu: 0, sun: 0, sunday: 0,
     sen: 1, senin: 1, mon: 1, monday: 1,
@@ -119,134 +119,69 @@ function parseQuoraDate(dateStr, baseDate = new Date()) {
     let month = null;
     let year = baseDate.getFullYear();
 
-    const token0Lower = tokens[0].toLowerCase();
-    const token1Lower = tokens[1].toLowerCase();
-
-    if (monthMap[token0Lower] !== undefined) {
-      month = monthMap[token0Lower];
-      day = parseInt(tokens[1], 10);
-    } else if (monthMap[token1Lower] !== undefined) {
-      month = monthMap[token1Lower];
-      day = parseInt(tokens[0], 10);
-    }
-
-    if (month !== null && !isNaN(day)) {
-      if (tokens[2]) {
-        const parsedYear = parseInt(tokens[2], 10);
-        if (!isNaN(parsedYear) && parsedYear > 2000) {
-          year = parsedYear;
+    for (const token of tokens) {
+      const num = parseInt(token, 10);
+      if (!isNaN(num)) {
+        if (num > 31) {
+          year = num;
+        } else if (day === null) {
+          day = num;
+        } else {
+          year = num;
         }
       } else {
-        const testDate = new Date(year, month, day);
-        if (testDate > baseDate) {
-          year -= 1;
+        const t3 = token.slice(0, 3).toLowerCase();
+        if (monthMap[t3] !== undefined) {
+          month = monthMap[t3];
         }
       }
-      const finalDate = new Date(year, month, day);
-      if (!isNaN(finalDate.getTime())) {
-        return finalDate.toISOString().split('T')[0];
+    }
+
+    if (day !== null && month !== null) {
+      const res = new Date(year, month, day);
+      if (res > baseDate && year === baseDate.getFullYear()) {
+        res.setFullYear(year - 1);
       }
+      return res.toISOString().split('T')[0];
     }
   }
-
-  try {
-    const standardDate = new Date(clean);
-    if (!isNaN(standardDate.getTime())) {
-      return standardDate.toISOString().split('T')[0];
-    }
-  } catch (e) {}
 
   return baseDate.toISOString().split('T')[0];
 }
 
-// Helper to download an image using the native Node fetch API
-async function downloadImage(url, destPath) {
-  try {
-    const res = await fetch(url);
-    if (res.ok) {
-      const arrayBuffer = await res.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      fs.writeFileSync(destPath, buffer);
-      return true;
-    }
-    console.error(`Gagal mengunduh gambar dari ${url}, HTTP status: ${res.status}`);
-    return false;
-  } catch (err) {
-    console.error(`Gagal mengunduh gambar ${url}: ${err.message}`);
-    return false;
-  }
-}
-
 async function run() {
-  console.log('Memulai browser virtual untuk menyinkronkan Quora Space (Mode Hibrid)...');
+  console.log('Memulai Sinkronisasi Artikel Quora (Enhanced Robust Scraper)...');
   
-  const apiKey = process.env.ZYTE_API_KEY;
-  const args = ['--no-sandbox', '--disable-setuid-sandbox'];
-  
-  if (apiKey) {
-    console.log('Menggunakan Zyte Smart Proxy Manager untuk bypass Cloudflare...');
-    args.push('--proxy-server=http://spm.zyte.com:8010');
-  } else {
-    console.log('PENTING: ZYTE_API_KEY tidak terdeteksi. Berjalan dalam mode standar (rentan terblokir Cloudflare di server/Codespace).');
-  }
-
   const browser = await puppeteer.launch({
-    headless: 'new',
-    args: args
+    headless: "new",
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
   });
 
   try {
     const page = await browser.newPage();
-    if (apiKey) {
-      await page.authenticate({
-        username: apiKey,
-        password: ''
-      });
-    }
-    
+    await page.setViewport({ width: 1280, height: 900 });
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-    
-    // Load saved cookies
-    const cookiePath = path.join(__dirname, 'quora_cookies.json');
+
+    const cookiePath = path.join(__dirname, 'quora-cookies.json');
     if (fs.existsSync(cookiePath)) {
-      console.log('Memuat cookies sesi dari scripts/quora_cookies.json...');
+      console.log('Memuat cookies Quora yang tersimpan...');
       const cookiesString = fs.readFileSync(cookiePath, 'utf8');
       const cookies = JSON.parse(cookiesString);
       await page.setCookie(...cookies);
-      console.log('Cookies sesi berhasil diterapkan ke browser.');
-    } else {
-      console.log('PENTING: scripts/quora_cookies.json tidak ditemukan. Sinkronisasi berjalan tanpa sesi login.');
     }
-    
+
     const spaces = [
-      { url: 'https://sekalaniskalauniverse.quora.com/', base: 'sekalaniskalauniverse.quora.com/' },
-      { url: 'https://waroengpodjokmangkoes.quora.com/', base: 'waroengpodjokmangkoes.quora.com/' }
+      { url: 'https://sekalaniskalauniverse.quora.com/', base: 'sekalaniskalauniverse.quora.com' }
     ];
-    
-    let allUniqueUrls = [];
+
+    const allUniqueUrls = [];
     const urlToDateMap = {};
-    
+
     for (const space of spaces) {
-      console.log(`\n===============================================`);
-      console.log(`Membuka halaman Quora Space: ${space.url}...`);
-      try {
-        await page.goto(space.url, { waitUntil: 'networkidle2', timeout: 35000 });
-      } catch (e) {
-        console.log('Menunggu halaman selesai dimuat...');
-      }
+      console.log(`\nMenavigasi ke Quora Space: ${space.url}`);
+      await page.goto(space.url, { waitUntil: 'networkidle2', timeout: 60000 }).catch(e => console.log(`Warning navigasi: ${e.message}`));
       
-      await new Promise(resolve => setTimeout(resolve, 5000));
-
-      const pageTitle = await page.title();
-      const bodyText = await page.evaluate(() => document.body.innerText);
-      console.log(`Halaman dimuat dengan judul: "${pageTitle}" (Panjang Teks: ${bodyText.length})`);
-      
-      if (bodyText.includes('Cloudflare') || pageTitle.includes('Cloudflare') || pageTitle.includes('Attention Required')) {
-        console.log('PERINGATAN: Diduga terblokir oleh proteksi Cloudflare.');
-      }
-
-      // Scroll halaman lebih dalam (160 kali scroll) untuk memuat sebanyak mungkin feed historis
-      console.log(`Menggulir (scrolling) halaman ${space.url} untuk memetakan penanggalan feed...`);
+      console.log('Memulai auto-scroll untuk menemukan seluruh URL artikel...');
       let previousUrlCount = 0;
       let noNewUrlsCount = 0;
       let uniqueUrls = [];
@@ -284,7 +219,6 @@ async function run() {
                 cleanUrl !== 'https://' + baseDomain + '/' &&
                 cleanUrl !== 'http://' + baseDomain + '/') {
               
-              // Cari dateStr
               let dateStr = '';
               let parent = a.parentElement;
               for (let dDepth = 0; dDepth < 8; dDepth++) {
@@ -331,7 +265,7 @@ async function run() {
         if (uniqueUrls.length === previousUrlCount && uniqueUrls.length > 50) {
           noNewUrlsCount++;
           if (noNewUrlsCount >= 15) {
-            console.log('Jumlah postingan tidak bertambah setelah 15 kali scroll. Selesai scrolling untuk Space ini.');
+            console.log('Jumlah postingan stabil. Selesai scrolling untuk Space ini.');
             break;
           }
         } else {
@@ -344,10 +278,7 @@ async function run() {
     }
     
     const uniqueUrls = [...new Set(allUniqueUrls)];
-    console.log(`\n===============================================`);
-    console.log(`Total seluruh artikel unik yang ditemukan di feed: ${uniqueUrls.length}`);
-    console.log(`Total entri dalam peta tanggal (urlToDateMap): ${Object.keys(urlToDateMap).length}`);
-    console.log(`===============================================\n`);
+    console.log(`\nTotal seluruh artikel unik di feed: ${uniqueUrls.length}`);
 
     const articlesDir = path.join(__dirname, '../src/content/artikel');
     const publicImagesDir = path.join(__dirname, '../public/images/artikel');
@@ -355,88 +286,17 @@ async function run() {
     if (!fs.existsSync(articlesDir)) fs.mkdirSync(articlesDir, { recursive: true });
     if (!fs.existsSync(publicImagesDir)) fs.mkdirSync(publicImagesDir, { recursive: true });
 
-    // FASE 1: PERBAIKAN LOKAL SECARA INSTAN (HYBRID)
-    console.log('--- FASE 1: Menjalankan Perbaikan Tanggal Lokal Instan ---');
-    const files = fs.readdirSync(articlesDir).filter(f => f.endsWith('.mdx'));
-    let localFixCount = 0;
-    const fallbackUrls = [];
+    // FASE 2: SCRAPING INDIVIDUAL DENGAN AUTO-EXPAND & REPOST RESOLUTION
+    const newArticles = uniqueUrls;
+    console.log(`\n--- Memproses artikel untuk ekstraksi konten mendalam ---`);
 
-    files.forEach(file => {
-      const filePath = path.join(articlesDir, file);
-      let fileContent = fs.readFileSync(filePath, 'utf8');
-      
-      // Ambil sourceUrl and publishDate dari frontmatter
-      const sourceUrlMatch = fileContent.match(/sourceUrl:\s*"([^"]+)"/);
-      const dateMatch = fileContent.match(/publishDate:\s*"([^"]+)"/);
-      
-      if (sourceUrlMatch && dateMatch) {
-        const sourceUrl = sourceUrlMatch[1];
-        const currentDate = dateMatch[1];
-        
-        // Kita perbaiki HANYA jika tanggal saat ini bermasalah (Juni 2026)
-        if (currentDate.startsWith('2026-06')) {
-          const feedDateStr = urlToDateMap[sourceUrl];
-          if (feedDateStr) {
-            const newDate = parseQuoraDate(feedDateStr);
-            if (newDate && newDate !== currentDate) {
-              const updatedContent = fileContent.replace(/(publishDate:\s*")([^"]+)(")/, `$1${newDate}$3`);
-              fs.writeFileSync(filePath, updatedContent, 'utf8');
-              console.log(`[Lokal Fix] Berhasil memperbaiki tanggal ${file}: ${currentDate} -> ${newDate} (dari: "${feedDateStr}")`);
-              localFixCount++;
-              return;
-            }
-          }
-          // Jika tanggal salah tetapi tidak ditemukan di feed map, masukkan ke antrean scraping individu
-          fallbackUrls.push(sourceUrl);
-        }
-      }
-    });
+    for (let index = 0; index < newArticles.length; index++) {
+      const postUrl = newArticles[index];
+      console.log(`\n[${index + 1}/${newArticles.length}] Memproses: ${postUrl}`);
 
-    console.log(`\nFase 1 Selesai! Berhasil memperbaiki ${localFixCount} artikel secara instan di lokal.`);
-    console.log(`Terdapat ${fallbackUrls.length} artikel dengan tanggal salah yang perlu diambil secara individual via fallback.\n`);
-
-    // Tambahkan juga semua URL feed yang BELUM memiliki file MDX sama sekali ke antrean
-    const newArticles = uniqueUrls.filter(url => {
-      // Periksa apakah ada file MDX dengan sourceUrl ini
-      const isExist = files.some(file => {
-        const fileContent = fs.readFileSync(path.join(articlesDir, file), 'utf8');
-        return fileContent.includes(`sourceUrl: "${url}"`);
-      });
-      return !isExist;
-    });
-
-    console.log(`Menemukan ${newArticles.length} artikel baru di feed yang belum pernah diimpor.`);
-    
-    // Gabungkan antrean scraping: fallback + artikel baru
-    const crawlQueue = [...new Set([...fallbackUrls, ...newArticles])];
-    console.log(`Total antrean scraping individu (baru + fallback): ${crawlQueue.length}`);
-    console.log(`===============================================\n`);
-
-    let newCount = 0;
-    let queueIdx = 0;
-
-    for (const postUrl of crawlQueue) {
-      queueIdx++;
-      console.log(`\n[Queue ${queueIdx}/${crawlQueue.length}] Memproses artikel secara mendalam: ${postUrl}...`);
-      
-      let success = false;
-      let attempts = 0;
-      const maxAttempts = 3;
-      
-      while (!success && attempts < maxAttempts) {
-        attempts++;
-        if (attempts > 1) {
-          console.log(`[Percobaan #${attempts}] Mencoba ulang ${postUrl}...`);
-          await new Promise(resolve => setTimeout(resolve, 3000));
-        }
-        
-        const newPage = await browser.newPage();
-        if (apiKey) {
-          await newPage.authenticate({
-            username: apiKey,
-            password: ''
-          });
-        }
+      const newPage = await browser.newPage();
+      try {
+        await newPage.setViewport({ width: 1280, height: 900 });
         await newPage.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         
         if (fs.existsSync(cookiePath)) {
@@ -445,283 +305,209 @@ async function run() {
           await newPage.setCookie(...cookies);
         }
         
-        try {
-          await newPage.goto(postUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
-          await newPage.waitForSelector('.qu-userSelect--text, article', { timeout: 20000 });
-        
-          let rawTitle = await newPage.title();
-          let title = rawTitle
-            .replace(/ - Sekala Niskala Universe \(SNU\) - Quora$/i, '')
-            .replace(/ - Sekala Niskala Universe - Quora$/i, '')
-            .replace(/ - Sekala Niskala Universe \(SNU\)$/i, '')
-            .replace(/ - Sekala Niskala Universe$/i, '')
-            .replace(/ - Quora$/i, '')
-            .trim();
+        await newPage.goto(postUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await newPage.waitForSelector('.qu-userSelect--text, article, .q-text', { timeout: 15000 }).catch(() => {});
 
-          const postData = await newPage.evaluate(() => {
-            const contentEl = document.querySelector('.qu-userSelect--text') || 
-                              document.querySelector('.q-text.qu-userSelect--text') ||
-                              document.querySelector('article') ||
-                              document.querySelector('.q-box.qu-userSelect--text');
-            
-            if (!contentEl) return null;
-
-            function wrapMarkdown(text, wrapper) {
-              const trimmed = text.trim();
-              if (!trimmed) return text;
-              const leading = text.match(/^\s*/)[0];
-              const trailing = text.match(/\s*$/)[0];
-              if (trimmed.startsWith(wrapper) && trimmed.endsWith(wrapper)) {
-                return text;
-              }
-              return `${leading}${wrapper}${trimmed}${wrapper}${trailing}`;
+        // 1. AUTO-EXPAND SEMUA TOMBOL "(more)" / "(Lanjutkan membaca)"
+        await newPage.evaluate(() => {
+          const clickables = Array.from(document.querySelectorAll('button, span, div, a, .qu-cursor--pointer'));
+          clickables.forEach(el => {
+            const txt = (el.textContent || '').trim().toLowerCase();
+            if (txt === '(more)' || txt === 'more' || txt === '(lanjutkan membaca)' || txt === 'lanjutkan membaca' || txt === 'continue reading' || txt === '(baca selengkapnya)') {
+              try { el.click(); } catch(e){}
             }
-
-            function toMarkdown(node) {
-              if (node.nodeType === 3) return node.textContent;
-              if (node.nodeType !== 1) return '';
-
-              const tagName = node.tagName.toLowerCase();
-              if (tagName === 'style' || tagName === 'script') return '';
-
-              let childrenMarkdown = '';
-              for (const child of node.childNodes) {
-                childrenMarkdown += toMarkdown(child);
-              }
-
-              switch (tagName) {
-                case 'p':
-                  if (!childrenMarkdown.trim()) return '';
-                  return '\n\n' + childrenMarkdown.trim() + '\n\n';
-                case 'span':
-                  const weight = node.style.fontWeight || '';
-                  const style = node.style.fontStyle || '';
-                  let text = childrenMarkdown;
-                  if (weight === 'bold' || weight === '700') text = wrapMarkdown(text, '**');
-                  if (style === 'italic') text = wrapMarkdown(text, '*');
-                  return text;
-                case 'b':
-                case 'strong':
-                  return wrapMarkdown(childrenMarkdown, '**');
-                case 'i':
-                case 'em':
-                  return wrapMarkdown(childrenMarkdown, '*');
-                case 'u':
-                  return childrenMarkdown;
-                case 'h1':
-                  return '\n\n# ' + childrenMarkdown.trim() + '\n\n';
-                case 'h2':
-                  return '\n\n## ' + childrenMarkdown.trim() + '\n\n';
-                case 'h3':
-                  return '\n\n### ' + childrenMarkdown.trim() + '\n\n';
-                case 'h4':
-                case 'h5':
-                case 'h6':
-                  return '\n\n#### ' + childrenMarkdown.trim() + '\n\n';
-                case 'blockquote':
-                  return '\n\n> ' + childrenMarkdown.trim().split('\n').map(line => line.trim()).join('\n> ') + '\n\n';
-                case 'ul':
-                  return '\n\n' + childrenMarkdown.trim() + '\n\n';
-                case 'ol':
-                  return '\n\n' + childrenMarkdown.trim() + '\n\n';
-                case 'li':
-                  return '\n- ' + childrenMarkdown.trim();
-                case 'a':
-                  const href = node.getAttribute('href') || '';
-                  if (href) return ` [${childrenMarkdown.trim() || href}](${href}) `;
-                  return childrenMarkdown;
-                case 'img':
-                  const src = node.getAttribute('src') || '';
-                  const alt = node.getAttribute('alt') || '';
-                  if (src) return `\n\n![${alt || 'image'}](${src})\n\n`;
-                  return '';
-                case 'br':
-                  return '\n';
-                case 'div':
-                  if (node.classList.contains('QTextBlockQuote___StyledAbsolute-sc-21084cfb-0')) return '';
-                  return childrenMarkdown;
-                default:
-                  return childrenMarkdown;
-              }
-            }
-
-            let markdown = toMarkdown(contentEl);
-            markdown = markdown.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
-
-            const dateEl = document.querySelector('.post_timestamp');
-            let dateStr = '';
-            if (dateEl) {
-              dateStr = dateEl.textContent.trim();
-            } else {
-              const currentPath = window.location.pathname;
-              const fallbackAnchor = Array.from(document.querySelectorAll('a')).find(a => {
-                const href = a.getAttribute('href') || '';
-                return href.includes(currentPath);
-              });
-              if (fallbackAnchor) {
-                dateStr = fallbackAnchor.textContent.trim();
-              } else {
-                const grayLight = document.querySelector('.q-text.qu-color--gray_light');
-                if (grayLight) dateStr = grayLight.textContent.trim();
-              }
-            }
-
-            return { markdown, dateStr };
           });
+        });
+        await new Promise(resolve => setTimeout(resolve, 800));
 
-          if (postData && !postData.dateStr && urlToDateMap[postUrl]) {
-            postData.dateStr = urlToDateMap[postUrl];
-            console.log(`Menggunakan tanggal dari feed map untuk ${postUrl}: ${postData.dateStr}`);
-          }
+        let rawTitle = await newPage.title();
+        let title = rawTitle
+          .replace(/ - Sekala Niskala Universe \(SNU\) - Quora$/i, '')
+          .replace(/ - Sekala Niskala Universe - Quora$/i, '')
+          .replace(/ - Sekala Niskala Universe \(SNU\)$/i, '')
+          .replace(/ - Sekala Niskala Universe$/i, '')
+          .replace(/ - Quora$/i, '')
+          .trim();
 
-          if (!postData || !postData.markdown) {
-            throw new Error("Gagal mengekstrak konten atau markdown kosong.");
-          }
-
-          if (!title) {
-            const text = postData.markdown.replace(/[#*_\-[\]()!]/g, ' ').replace(/\s+/g, ' ').trim();
-            title = text.slice(0, 50) + (text.length > 50 ? '...' : '');
-          }
-
-          const slug = slugify(title);
-          const filePath = path.join(articlesDir, `${slug}.mdx`);
-
-          const formattedDate = parseQuoraDate(postData.dateStr);
-
-          // Handle cover image
-          let coverPath = '';
-          let existingCoverPath = '';
-          
-          if (fs.existsSync(filePath)) {
-            const existingMdx = fs.readFileSync(filePath, 'utf8');
-            const covMatch = existingMdx.match(/cover:\s*"([^"]+)"/);
-            if (covMatch) {
-              existingCoverPath = covMatch[1];
-              coverPath = existingCoverPath;
+        const postData = await newPage.evaluate(() => {
+          // Cari author
+          let author = 'Komunitas SNU';
+          const authorAnchor = document.querySelector('a[href*="/profile/"]');
+          if (authorAnchor) {
+            const authorText = authorAnchor.textContent.trim();
+            if (authorText && !authorText.includes('Profile') && !authorText.includes('Sekala Niskala')) {
+              author = authorText;
             }
           }
 
-          if (!coverPath) {
-            const imgUrl = await newPage.evaluate(() => {
-              const firstImg = document.querySelector('.qu-userSelect--text img');
-              return firstImg ? firstImg.src : '';
+          // Cari tanggal
+          const dateEl = document.querySelector('.post_timestamp');
+          let dateStr = '';
+          if (dateEl) {
+            dateStr = dateEl.textContent.trim();
+          } else {
+            const grayLight = document.querySelector('.q-text.qu-color--gray_light');
+            if (grayLight) dateStr = grayLight.textContent.trim();
+          }
+
+          function wrapMarkdown(text, wrapper) {
+            const trimmed = text.trim();
+            if (!trimmed) return text;
+            const leading = text.match(/^\s*/)[0];
+            const trailing = text.match(/\s*$/)[0];
+            if (trimmed.startsWith(wrapper) && trimmed.endsWith(wrapper)) {
+              return text;
+            }
+            return `${leading}${wrapper}${trimmed}${wrapper}${trailing}`;
+          }
+
+          function toMarkdown(node) {
+            if (node.nodeType === 3) return node.textContent;
+            if (node.nodeType !== 1) return '';
+
+            const tagName = node.tagName.toLowerCase();
+            if (tagName === 'style' || tagName === 'script' || tagName === 'button') return '';
+
+            let childrenMarkdown = '';
+            for (const child of node.childNodes) {
+              childrenMarkdown += toMarkdown(child);
+            }
+
+            switch (tagName) {
+              case 'p':
+                if (!childrenMarkdown.trim()) return '';
+                return '\n\n' + childrenMarkdown.trim() + '\n\n';
+              case 'span':
+                const weight = node.style.fontWeight || '';
+                const style = node.style.fontStyle || '';
+                let text = childrenMarkdown;
+                if (weight === 'bold' || weight === '700') text = wrapMarkdown(text, '**');
+                if (style === 'italic') text = wrapMarkdown(text, '*');
+                return text;
+              case 'b':
+              case 'strong':
+                return wrapMarkdown(childrenMarkdown, '**');
+              case 'i':
+              case 'em':
+                return wrapMarkdown(childrenMarkdown, '*');
+              case 'h1':
+                return '\n\n# ' + childrenMarkdown.trim() + '\n\n';
+              case 'h2':
+                return '\n\n## ' + childrenMarkdown.trim() + '\n\n';
+              case 'h3':
+                return '\n\n### ' + childrenMarkdown.trim() + '\n\n';
+              case 'blockquote':
+                return '\n\n> ' + childrenMarkdown.trim().split('\n').map(line => line.trim()).join('\n> ') + '\n\n';
+              case 'ul':
+                return '\n\n' + childrenMarkdown.trim() + '\n\n';
+              case 'ol':
+                return '\n\n' + childrenMarkdown.trim() + '\n\n';
+              case 'li':
+                return '\n- ' + childrenMarkdown.trim();
+              case 'a':
+                const href = node.getAttribute('href') || '';
+                if (href && !href.startsWith('javascript:')) return ` [${childrenMarkdown.trim() || href}](${href}) `;
+                return childrenMarkdown;
+              case 'img':
+                const src = node.getAttribute('src') || '';
+                const alt = node.getAttribute('alt') || '';
+                if (src && !src.includes('data:image')) return `\n\n![${alt || 'image'}](${src})\n\n`;
+                return '';
+              case 'br':
+                return '\n';
+              default:
+                return childrenMarkdown;
+            }
+          }
+
+          // Kumpulkan semua blok konten teks di dalam artikel (termasuk quoted stories)
+          const textBlocks = Array.from(document.querySelectorAll('.qu-userSelect--text, .q-text.qu-userSelect--text'));
+          let combinedMarkdown = '';
+
+          if (textBlocks.length > 0) {
+            textBlocks.forEach(block => {
+              const md = toMarkdown(block).trim();
+              if (md && !combinedMarkdown.includes(md)) {
+                combinedMarkdown += md + '\n\n';
+              }
             });
-
-            if (imgUrl && imgUrl.startsWith('http')) {
-              let imgExt = 'jpg';
-              const urlWithoutQuery = imgUrl.split('?')[0].split('#')[0];
-              const lastSlashIndex = urlWithoutQuery.lastIndexOf('/');
-              const lastPart = urlWithoutQuery.substring(lastSlashIndex + 1);
-              if (lastPart.includes('.')) {
-                const parts = lastPart.split('.');
-                imgExt = parts[parts.length - 1];
-              }
-
-              const shortSlug = slug.slice(0, 50).replace(/-+$/, '');
-              const imgName = `cover-${shortSlug}.${imgExt}`;
-              const destImgPath = path.join(publicImagesDir, imgName);
-
-              try {
-                console.log(`Mengunduh gambar sampul: ${imgUrl}...`);
-                const res = await fetch(imgUrl);
-                if (res.ok) {
-                  const arrayBuffer = await res.arrayBuffer();
-                  const buffer = Buffer.from(arrayBuffer);
-                  fs.writeFileSync(destImgPath, buffer);
-                  coverPath = `../../../public/images/artikel/${imgName}`;
-                }
-              } catch (err) {
-                console.error(`Gagal mengunduh gambar sampul: ${err.message}`);
-              }
-            }
+          } else {
+            const articleEl = document.querySelector('article') || document.querySelector('.q-box');
+            if (articleEl) combinedMarkdown = toMarkdown(articleEl);
           }
 
-          const descriptionText = cleanDescriptionMarkdown(postData.markdown);
+          combinedMarkdown = combinedMarkdown.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 
-          let finalMarkdown = postData.markdown;
-          if (!fs.existsSync(filePath)) {
-            const imgRegex = /!\[(.*?)\]\((https?:\/\/[^)]+)\)/g;
-            let match;
-            let inlineImgIndex = 1;
-            imgRegex.lastIndex = 0;
+          return { markdown: combinedMarkdown, dateStr, author };
+        });
 
-            while ((match = imgRegex.exec(postData.markdown)) !== null) {
-              const alt = match[1];
-              const fullUrl = match[2];
-              const cleanUrl = fullUrl.split('?')[0].split('#')[0];
-              
-              let imgExt = 'jpg';
-              const lastSlashIndex = cleanUrl.lastIndexOf('/');
-              const lastPart = cleanUrl.substring(lastSlashIndex + 1);
-              if (lastPart.includes('.')) {
-                const parts = lastPart.split('.');
-                imgExt = parts[parts.length - 1];
-                if (imgExt.toLowerCase() === 'jpeg') imgExt = 'jpg';
-                imgExt = imgExt.split(/[?#]/)[0];
-              }
+        if (postData && !postData.dateStr && urlToDateMap[postUrl]) {
+          postData.dateStr = urlToDateMap[postUrl];
+        }
 
-              const shortSlug = slug.slice(0, 50).replace(/-+$/, '');
-              const imgName = `content-${shortSlug}-${inlineImgIndex}.${imgExt}`;
-              const destImgPath = path.join(publicImagesDir, imgName);
-              const relativePath = `/images/artikel/${imgName}`;
+        if (!postData || !postData.markdown || postData.markdown.length < 20) {
+          console.log(`[Lewati] Konten terlalu pendek atau kosong untuk ${postUrl}`);
+          continue;
+        }
 
-              console.log(`Mengunduh gambar konten: ${cleanUrl}...`);
-              const success = await downloadImage(cleanUrl, destImgPath);
-              if (success) {
-                finalMarkdown = finalMarkdown.replace(match[0], `![${alt}](${relativePath})`);
-                inlineImgIndex++;
-              }
-            }
+        if (!title) {
+          const text = postData.markdown.replace(/[#*_\-[\]()!]/g, ' ').replace(/\s+/g, ' ').trim();
+          title = text.slice(0, 50) + (text.length > 50 ? '...' : '');
+        }
+
+        const slug = slugify(title);
+        const filePath = path.join(articlesDir, `${slug}.mdx`);
+        const formattedDate = parseQuoraDate(postData.dateStr);
+
+        let coverPath = '';
+        if (fs.existsSync(filePath)) {
+          const existingMdx = fs.readFileSync(filePath, 'utf8');
+          const covMatch = existingMdx.match(/cover:\s*"([^"]+)"/);
+          if (covMatch) {
+            coverPath = covMatch[1];
           }
+        }
 
-          const cleanMarkdown = finalMarkdown
-            .replace(/୨>0<୧/g, '୨&gt;0&lt;୧')
-            .replace(/<--/g, '&lt;--')
-            .replace(/-->/g, '--&gt;')
-            .replace(/></g, '&gt;&lt;');
-            
-          const mdxContent = `---
-title: "${title.replace(/"/g, '\\"')}"
-description: "${descriptionText.replace(/"/g, '\\"')}"
-publishDate: "${formattedDate}"
-author: "lovelie-light"
+        const descriptionText = cleanDescriptionMarkdown(postData.markdown);
+        let finalMarkdown = postData.markdown;
+
+        const authorSlug = slugify(postData.author || 'Komunitas SNU');
+
+        const mdxContent = `---
+title: ${JSON.stringify(title)}
+description: ${JSON.stringify(descriptionText)}
+${coverPath ? `cover: "${coverPath}"\n` : ''}publishDate: "${formattedDate}"
+author: "${authorSlug}"
 tags: ["quora-sync"]
 sourceUrl: "${postUrl}"
-${coverPath ? `cover: "${coverPath}"` : ''}
 ---
 
-${cleanMarkdown}
+${finalMarkdown}
 `;
 
-          fs.writeFileSync(filePath, mdxContent, 'utf8');
-          console.log(`[Sukses] Sinkronisasi mendalam artikel: ${title} -> Tanggal: ${formattedDate}`);
-          newCount++;
-          success = true;
+        fs.writeFileSync(filePath, mdxContent, 'utf8');
+        console.log(`✓ Berhasil menyimpan artikel: ${slug}.mdx (${postData.markdown.split(/\s+/).length} kata)`);
 
-        } catch (err) {
-          console.error(`Gagal memproses artikel ${postUrl} (Percobaan ${attempts}/${maxAttempts}): ${err.message}`);
-          if (attempts >= maxAttempts) {
-            console.error(`[GAGAL PERMANEN] Melewati artikel ${postUrl} setelah ${maxAttempts} percobaan.`);
-          }
-        } finally {
-          await newPage.close();
-        }
+      } catch (err) {
+        console.error(`Error memproses ${postUrl}: ${err.message}`);
+      } finally {
+        await newPage.close();
       }
-      
-      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
-    console.log(`\n===============================================`);
-    console.log(`Sinkronisasi Hibrid Selesai!`);
-    console.log(`- Perbaikan lokal instan: ${localFixCount} artikel.`);
-    console.log(`- Sinkronisasi mendalam baru/fallback: ${newCount} artikel.`);
-    console.log(`===============================================\n`);
+    console.log('\n===============================================');
+    console.log('Sinkronisasi Quora Selesai!');
+    console.log('===============================================\n');
 
-  } catch (err) {
-    console.error(`Gagal melakukan sinkronisasi: ${err.message}`);
+  } catch (error) {
+    console.error('Fatal Error:', error);
   } finally {
     await browser.close();
   }
 }
 
-run();
+if (require.main === module) {
+  run();
+}
+
+module.exports = { run };
