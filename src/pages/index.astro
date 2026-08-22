@@ -4,8 +4,6 @@ import BaseLayout from "@/layouts/BaseLayout.astro"
 import Hero from "@/components/Hero.astro"
 import ArticleCard from "@/components/ArticleCard.astro"
 import EmptyState from "@/components/EmptyState.astro"
-import TagBadge from "@/components/TagBadge.astro"
-import Button from "@/components/Button.astro"
 import EventCard from "@/components/EventCard.astro"
 import CommunityBanner from "@/components/CommunityBanner.astro"
 import { collectTags, sortArtikel, formatDate } from "@/lib/utils"
@@ -13,13 +11,9 @@ import { collectTags, sortArtikel, formatDate } from "@/lib/utils"
 const all = sortArtikel(await getCollection("artikel"))
 const featured = all.find((a) => a.data.featured) ?? all[0]
 const rest = all.filter((a) => a.id !== featured?.id).slice(0, 6)
-const tags = collectTags(all).slice(0, 8)
+const tags = collectTags(all).slice(0, 6)
 
 const quoraArticles = all.filter((a) => a.data.tags?.includes("quora-sync")).slice(0, 3)
-
-// Helper to format slugified author names
-const formatAuthor = (name: string) => 
-  name ? name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "Anonim"
 
 // Retrieve upcoming events
 const allEvents = await getCollection("events", ({ data }) => import.meta.env.DEV || !data.draft)
@@ -36,34 +30,56 @@ const upcomingEvents = allEvents
 <BaseLayout>
   <Hero />
 
-  <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6">
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 space-y-24">
+    
+    <!-- 01. Featured Article (Karya Terpilih) -->
     {
       featured && (
-        <section class="mb-14 reveal-on-scroll" aria-labelledby="featured-heading">
-          <div class="mb-5 flex items-baseline justify-between">
-            <h2 id="featured-heading" class="font-serif text-2xl font-semibold">
-              Disematkan
-            </h2>
+        <section class="reveal-on-scroll" aria-labelledby="featured-heading">
+          <div class="mb-6 flex items-center justify-between pb-3 border-b border-[var(--color-border)]">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-[var(--color-primary)]">01.</span>
+              <h2 id="featured-heading" class="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-[var(--color-foreground)]">
+                Karya Pilihan Redaksi
+              </h2>
+            </div>
+            <span class="text-xs font-mono text-[var(--color-muted)] uppercase tracking-widest hidden sm:inline-block">
+              Manuskrip Utama
+            </span>
           </div>
-          <ArticleCard entry={featured}  featured loading="eager" />
+          <ArticleCard entry={featured} featured loading="eager" />
         </section>
       )
     }
 
+    <!-- 02. Curated Themes (Jelajahi Berdasarkan Tema) -->
     {
       tags.length > 0 && (
-        <section class="mb-14 reveal-on-scroll" aria-labelledby="tags-heading">
-          <h2 id="tags-heading" class="mb-5 font-serif text-2xl font-semibold">
-            Telusuri Tema
-          </h2>
-          <div class="flex flex-wrap gap-2">
+        <section class="reveal-on-scroll" aria-labelledby="tags-heading">
+          <div class="mb-6 flex items-center justify-between pb-3 border-b border-[var(--color-border)]">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-[var(--color-primary)]">02.</span>
+              <h2 id="tags-heading" class="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-[var(--color-foreground)]">
+                Arsip & Ruang Tematik
+              </h2>
+            </div>
+            <a href="/artikel" class="text-xs font-mono text-[var(--color-primary)] hover:underline uppercase tracking-wider">
+              Semua Topik &rarr;
+            </a>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {tags.map(({ tag, count }) => (
               <a
                 href={`/tag/${tag}`}
-                class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)]/60 px-3.5 py-1.5 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-muted)] transition-all duration-300 hover:bg-[var(--color-surface-2)] hover:text-[var(--color-foreground)] hover:border-[var(--color-primary)]/40"
+                class="group p-4 rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/50 hover:bg-[var(--color-surface)] hover:border-[var(--color-primary)]/40 transition-all text-center flex flex-col justify-center items-center gap-1.5"
               >
-                #{tag}
-                <span class="text-[9px] font-sans font-semibold bg-[var(--color-surface)] border border-[var(--color-border)] px-1.5 py-0.5 rounded-full text-[var(--color-muted)] leading-none">{count}</span>
+                <span class="font-serif text-base text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors capitalize">
+                  {tag}
+                </span>
+                <span class="text-[10px] font-mono text-[var(--color-muted)]">
+                  {count} Naskah
+                </span>
               </a>
             ))}
           </div>
@@ -71,18 +87,52 @@ const upcomingEvents = allEvents
       )
     }
 
+    <!-- 03. Latest Articles (Koleksi Tulisan Terbaru) -->
+    <section aria-labelledby="latest-heading" class="reveal-on-scroll">
+      <div class="mb-8 flex items-center justify-between pb-3 border-b border-[var(--color-border)]">
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-mono text-[var(--color-primary)]">03.</span>
+          <h2 id="latest-heading" class="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-[var(--color-foreground)]">
+            Tulisan Terkini
+          </h2>
+        </div>
+        <a href="/artikel" class="text-xs font-mono text-[var(--color-primary)] hover:underline uppercase tracking-wider">
+          Buka Seluruh Arsip &rarr;
+        </a>
+      </div>
+
+      {
+        rest.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rest.map((entry) => (
+              <ArticleCard entry={entry} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Belum ada tulisan"
+            description="Artikel pertama akan segera hadir di ruang ini."
+          />
+        )
+      }
+    </section>
+
+    <!-- 04. Upcoming Events (Agenda & Pertemuan) -->
     {
       upcomingEvents.length > 0 && (
-        <section class="mb-14 reveal-on-scroll" aria-labelledby="upcoming-events-heading">
-          <div class="mb-5 flex items-baseline justify-between border-b border-[var(--color-border)]/30 pb-2">
-            <h2 id="upcoming-events-heading" class="font-serif text-2xl font-semibold">
-              Kegiatan Mendatang
-            </h2>
-            <Button href="/events" variant="ghost" size="sm" class="text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 text-xs">
-              Lihat semua &rarr;
-            </Button>
+        <section class="reveal-on-scroll" aria-labelledby="upcoming-events-heading">
+          <div class="mb-8 flex items-center justify-between pb-3 border-b border-[var(--color-border)]">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-[var(--color-primary)]">04.</span>
+              <h2 id="upcoming-events-heading" class="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-[var(--color-foreground)]">
+                Agenda & Pertemuan
+              </h2>
+            </div>
+            <a href="/events" class="text-xs font-mono text-[var(--color-primary)] hover:underline uppercase tracking-wider">
+              Semua Kegiatan &rarr;
+            </a>
           </div>
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {upcomingEvents.map((event) => (
               <EventCard event={event} />
             ))}
@@ -91,95 +141,10 @@ const upcomingEvents = allEvents
       )
     }
 
-    <section aria-labelledby="latest-heading" class="reveal-on-scroll">
-      <div class="mb-5 flex items-baseline justify-between">
-        <h2 id="latest-heading" class="font-serif text-2xl font-semibold">Tulisan Terbaru</h2>
-        <Button href="/artikel" variant="ghost" size="sm" class="text-[var(--color-primary)] hover:text-[var(--color-primary)]/80">
-          Lihat semua &rarr;
-        </Button>
-      </div>
-      {
-        rest.length > 0 ? (
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((entry) => (
-              <ArticleCard entry={entry} />
-            ))}
-            
-            {/* Custom Seri Badge Bento Card matching target layout */}
-            <div class="p-1.5 rounded-[1.75rem] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[0_12px_24px_-12px_rgba(0,0,0,0.3)] flex flex-col justify-between group">
-              <a href="/seri/wpm-saga" class="flex flex-1 flex-col justify-center items-center p-6 rounded-[1.375rem] bg-[var(--color-surface-2)]/30 border border-[var(--color-border)]/40 text-center gap-4 min-h-[320px] hover:no-underline">
-                <span class="text-[9px] font-mono uppercase tracking-[0.2em] text-[var(--color-muted)]">Seri Pilihan</span>
-                <div class="h-28 w-28 rounded-full border border-[var(--color-primary)]/20 bg-[var(--color-surface-2)]/50 flex items-center justify-center relative">
-                  <!-- Gold Crest Leaf/Flower Emblem SVG -->
-                  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-500 group-hover:scale-105">
-                    <circle cx="12" cy="12" r="10" stroke-dasharray="3 3"></circle>
-                    <path d="M12 2v20M2 12h20M12 12c2.5-3.5 5.5-3.5 8 0-2.5 3.5-5.5 3.5-8 0M12 12c-2.5-3.5-5.5-3.5-8 0 2.5 3.5 5.5 3.5 8 0"></path>
-                    <circle cx="12" cy="12" r="3" fill="var(--color-primary)" opacity="0.8"></circle>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="font-serif text-xl font-medium text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors">
-                    Waroeng Podjok Mangkoes
-                  </h3>
-                  <p class="mt-1 text-[9px] font-mono uppercase tracking-[0.1em] text-[var(--color-muted)]">Fiksi Fantasi Mistis (WPM SAGA)</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        ) : (
-          <EmptyState
-            title="Belum ada tulisan"
-            description="Artikel pertama akan segera hadir. Pantau terus ruang ini."
-          />
-        )
-      }
-    </section>
-
-    <!-- Quora Space Highlights Section -->
-    {
-      quoraArticles.length > 0 && (
-        <section class="mt-16 pt-8 border-t border-[var(--color-border)]/30 reveal-on-scroll" aria-labelledby="quora-heading">
-          <div class="mb-6 flex items-baseline justify-between border-b border-[var(--color-border)]/30 pb-2">
-            <h2 id="quora-heading" class="font-serif text-2xl font-semibold flex items-center gap-2 text-[var(--color-foreground)]">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-accent)]">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              Sorotan Quora Space
-            </h2>
-            <a 
-              href="https://sekalaniskalauniverse.quora.com/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="text-xs font-mono uppercase tracking-[0.1em] text-[var(--color-primary)] hover:underline"
-            >
-              Kunjungi Space &rarr;
-            </a>
-          </div>
-
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {quoraArticles.map((post) => (
-              <div class="p-5 rounded-2xl border border-[var(--color-border)]/40 bg-[var(--color-surface)] shadow-sm hover:border-[var(--color-primary)]/30 transition-all flex flex-col justify-between group">
-                <div>
-                  <span class="text-[9px] font-mono uppercase tracking-[0.1em] text-[var(--color-muted)]">Quora Space</span>
-                  <h3 class="font-serif text-base font-semibold mt-2 text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors line-clamp-2">
-                    <a href={`/artikel/${post.id}`} class="hover:no-underline text-[var(--color-foreground)] group-hover:text-[var(--color-primary)]">{post.data.title}</a>
-                  </h3>
-                  <p class="text-xs text-[var(--color-muted)] mt-2 leading-relaxed line-clamp-3">{post.data.description}</p>
-                </div>
-                <div class="mt-4 pt-3 border-t border-[var(--color-border)]/20 flex items-center justify-between text-[10px] font-mono text-[var(--color-muted)]">
-                  <span>Oleh: {formatAuthor(post.data.author)} • {formatDate(post.data.publishDate)}</span>
-                  <a href={`/artikel/${post.id}`} class="text-[var(--color-accent)] hover:underline font-semibold">Baca &rarr;</a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )
-    }
-
-    <!-- Community Call-To-Action Banner -->
-    <section class="mt-16 pt-8 border-t border-[var(--color-border)]/30 reveal-on-scroll" aria-labelledby="community-heading">
+    <!-- 05. Community Banner & Call to Sanctuary -->
+    <section class="reveal-on-scroll" aria-labelledby="community-heading">
       <CommunityBanner />
     </section>
+
   </div>
 </BaseLayout>

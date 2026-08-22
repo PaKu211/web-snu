@@ -1,6 +1,5 @@
 ---
 import { SITE, QUORA_URL } from "@/config"
-import Button from "@/components/Button.astro"
 
 interface Props {
   eyebrow?: string
@@ -9,76 +8,78 @@ interface Props {
 }
 
 const {
-  eyebrow = "Sekala · Niskala",
-  title = "Sekala Niskala Universe",
-  subtitle = "Di batas nyata dan tak kasat. Menjelajahi jati diri dan kesadaran melalui kebajikan leluhur serta alam semesta.",
+  eyebrow = "SEKALA · NISKALA UNIVERSE — VOL. I",
+  title = "Di Batas Nyata dan Tak Kasat",
+  subtitle = "Di sinilah kita berkumpul, dalam ekosistem di mana batas antara yang terlihat dan yang gaib berpadu. Menjelajahi kesadaran batin, kisah leluhur, dan misteri semesta.",
 } = Astro.props
 ---
 
-<section class="relative min-h-[85dvh] flex items-center justify-center overflow-hidden border-b border-[var(--color-border)] py-24 sm:py-32">
-  <!-- Mystical Forest Mist Background Image -->
+<section class="relative min-h-[82dvh] flex items-center justify-center overflow-hidden border-b border-[var(--color-border)] py-20 sm:py-28">
+  <!-- Mystical Ambient Imagery with Soft Cinematic Obsidian Mask -->
   <div 
-    class="absolute inset-0 z-0 bg-[url('/hero_bg.jpg')] bg-cover bg-center bg-no-repeat opacity-45"
+    class="absolute inset-0 z-0 bg-[url('/hero_bg.jpg')] bg-cover bg-center bg-no-repeat opacity-35 scale-105 transition-transform duration-1000 ease-out"
     aria-hidden="true"
   ></div>
   
-  <!-- Smooth Cinematic Gradient Fading Overlay -->
   <div 
-    class="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[var(--color-background)]/70 to-[var(--color-background)]"
+    class="absolute inset-0 z-0 bg-gradient-to-b from-[var(--color-background)]/60 via-[var(--color-background)]/80 to-[var(--color-background)]"
     aria-hidden="true"
   ></div>
 
-  <!-- Drifting Ambient glows for volumetric volumetric fog effect -->
-  <div class="mesh-glow-1 pointer-events-none absolute top-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-[var(--color-accent)]/10 blur-[100px]" aria-hidden="true"></div>
-  <div class="mesh-glow-2 pointer-events-none absolute bottom-1/4 right-1/4 h-[500px] w-[500px] rounded-full bg-[var(--color-primary)]/8 blur-[120px]" aria-hidden="true"></div>
+  <!-- Soft Vignette Framing -->
+  <div class="absolute inset-0 z-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.8)] pointer-events-none" aria-hidden="true"></div>
 
-  <div class="relative z-10 mx-auto max-w-5xl px-6 text-center w-full">
-    <div class="max-w-4xl mx-auto flex flex-col items-center">
+  <div class="relative z-10 mx-auto max-w-4xl px-6 text-center w-full">
+    <div class="flex flex-col items-center">
       
-      <!-- Eyebrow text matching header style -->
-      <span class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur-sm px-4 py-1.5 text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--color-primary)] shadow-sm">
-        <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" aria-hidden="true"></span>
-        {eyebrow}
-      </span>
+      <!-- Editorial Edition / Masthead Eyebrow -->
+      <div class="inline-flex items-center gap-3 mb-6">
+        <span class="h-[1px] w-8 bg-[var(--color-primary)]/40" aria-hidden="true"></span>
+        <span class="text-[11px] font-mono uppercase tracking-[0.3em] text-[var(--color-primary)] font-medium">
+          {eyebrow}
+        </span>
+        <span class="h-[1px] w-8 bg-[var(--color-primary)]/40" aria-hidden="true"></span>
+      </div>
       
-      <!-- Cormorant Upright Gold Editorial Title -->
-      <h1
-        class="mt-8 font-serif text-5xl font-medium leading-[1.05] tracking-wide text-pretty sm:text-6xl md:text-7.5xl text-[var(--color-foreground)] max-w-4xl"
-        style="text-shadow: 0 4px 12px rgba(0,0,0,0.6);"
-      >
+      <!-- Cormorant Monumental Serif Title -->
+      <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-normal leading-[1.08] tracking-tight text-[var(--color-foreground)] max-w-3xl text-balance">
         {title}
       </h1>
       
-      <!-- Grotesque Lede Paragraph -->
-      <p 
-        class="mt-6 max-w-[56ch] text-base sm:text-lg leading-relaxed text-[var(--color-muted)] text-pretty"
-        style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);"
-      >
-        {subtitle}
+      <!-- Literary Lede -->
+      <p class="mt-7 max-w-2xl text-base sm:text-lg leading-relaxed text-[var(--color-muted)] font-serif italic text-balance">
+        "{subtitle}"
       </p>
-      
-      <!-- Centered Premium Accent CTA buttons matching target layout -->
-      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-        <Button 
-          href="/artikel" 
-          variant="accent" 
-          size="lg" 
-          class="font-semibold uppercase tracking-[0.1em] px-8 text-xs h-12 shadow-[0_8px_24px_rgba(26,167,155,0.25)] border border-[var(--color-accent)]/20"
-          hasArrow
+
+      <!-- Editorial Navigational Anchors -->
+      <div class="mt-12 flex flex-wrap items-center justify-center gap-4 text-xs font-mono">
+        <a 
+          href="/artikel"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary)]/40 bg-[var(--color-surface)]/80 px-6 py-3 text-[var(--color-primary)] transition-all duration-300 hover:bg-[var(--color-primary)] hover:text-[var(--color-primary-foreground)] hover:border-[var(--color-primary)] shadow-sm"
         >
-          Mulai Membaca
-        </Button>
-        <Button 
-          href={QUORA_URL} 
+          <span>Buka Arsip Tulisan</span>
+          <span aria-hidden="true">&darr;</span>
+        </a>
+        
+        <a 
+          href={QUORA_URL}
           target="_blank"
           rel="noopener noreferrer"
-          variant="outline" 
-          size="lg" 
-          class="font-semibold uppercase tracking-[0.1em] px-8 text-xs h-12 border border-[var(--color-primary)]/40 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+          class="inline-flex items-center gap-1.5 px-5 py-3 text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]"
         >
-          Quora Space
-        </Button>
+          <span>Ruang Komunitas Quora</span>
+          <span class="text-[10px] opacity-60">&nearr;</span>
+        </a>
       </div>
+
+      <!-- Quick Curated Topics Hairline Navigation -->
+      <div class="mt-14 pt-8 border-t border-[var(--color-border-subtle)] flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] font-mono tracking-widest uppercase text-[var(--color-muted)]/80">
+        <span class="text-[var(--color-primary)]/60">Fokus Bacaan:</span>
+        <a href="/tag/spiritual" class="hover:text-[var(--color-primary)] transition-colors">01. Batin & Kesadaran</a>
+        <a href="/seri/wpm-saga" class="hover:text-[var(--color-primary)] transition-colors">02. WPM [SAGA]</a>
+        <a href="/tag/misteri" class="hover:text-[var(--color-primary)] transition-colors">03. Lore & Gaib</a>
+      </div>
+
     </div>
   </div>
 </section>

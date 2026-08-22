@@ -2,63 +2,68 @@
 
 /*
   ============================================================
-  PORTAL SEKALA NISKALA — Palet "Kabut Subuh" (Dawn Mist)
-  Dark mode by default. Light mode toggled via .light on <html>.
+  SEKALA NISKALA UNIVERSE — Editorial Sanctuary Design System
+  Atmosphere: Deep Obsidian Dawn, Mineral Gold, Warm Earth.
+  High-end editorial typography with physical tactile texture.
   ============================================================
 */
 
 @theme {
   --font-sans: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Cormorant Upright", "Fraunces", ui-serif, Georgia, serif;
+  --font-serif: "Cormorant Upright", "Fraunces", Georgia, serif;
+  --font-editorial: "Fraunces", "Cormorant Upright", Georgia, serif;
 
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 }
 
-/* ---- DARK (default) — kabut subuh menjelang fajar ---- */
+/* ---- DARK (Default) — Keheningan Fajar di Hutan Suci ---- */
 :root {
-  --background: #080f0d;
-  --surface: #0f1b17;
-  --surface-2: #152822;
-  --foreground: #e3ece8;
-  --muted: #708b83;
-  --border: rgba(32, 178, 170, 0.15);
-  --primary: #d5c39a;
-  --primary-foreground: #080f0d;
-  --accent: #1aa79b;
+  --background: #080c0a;
+  --surface: #0e1512;
+  --surface-2: #141f1b;
+  --surface-elevated: #1a2722;
+  --foreground: #eceae4;
+  --muted: #82948c;
+  --border: rgba(212, 197, 163, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --primary: #d4c5a3;
+  --primary-foreground: #080c0a;
+  --accent: #22998b;
   --accent-foreground: #ffffff;
-  --ring: #1aa79b;
+  --ring: #d4c5a3;
 }
 
-/* ---- LIGHT — kabut pagi terang ---- */
+/* ---- LIGHT — Kertas Lontar & Kabut Pagi ---- */
 :root.light {
-  --background: #f4f7f5;
+  --background: #f7f6f2;
   --surface: #ffffff;
-  --surface-2: #ebf0ec;
-  --foreground: #142721;
-  --muted: #5c746c;
-  --border: rgba(26, 167, 155, 0.12);
-  --primary: #9b7f43;
+  --surface-2: #eeebe3;
+  --surface-elevated: #ffffff;
+  --foreground: #18221e;
+  --muted: #60726a;
+  --border: rgba(30, 45, 40, 0.12);
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --primary: #8c7643;
   --primary-foreground: #ffffff;
-  --accent: #128278;
+  --accent: #178377;
   --accent-foreground: #ffffff;
-  --ring: #128278;
+  --ring: #178377;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-elevated: var(--surface-elevated);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-ring: var(--ring);
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 0.25rem);
-  --radius-sm: calc(var(--radius) - 0.5rem);
 }
 
 @layer base {
@@ -81,6 +86,8 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    position: relative;
+    min-height: 100vh;
   }
 
   ::selection {
@@ -88,144 +95,103 @@
     color: var(--color-primary-foreground);
   }
 
-  /* Prose styles for MDX article bodies */
+  /* Fine physical paper grain texture overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Editorial Manuscript Prose */
   .prose {
     color: var(--color-foreground);
-    line-height: 1.85;
+    line-height: 1.95;
     font-family: var(--font-serif);
-    font-size: 1.1rem;
+    font-size: 1.18rem;
     letter-spacing: 0.015em;
   }
   
-  /* Beautiful Drop-cap for the first paragraph of article */
   .prose > p:first-of-type::first-letter {
     font-family: var(--font-serif);
-    font-size: 3.5em;
+    font-size: 3.75em;
     float: left;
-    line-height: 0.85;
-    margin-top: 0.1em;
-    margin-right: 0.15em;
-    font-weight: 700;
+    line-height: 0.82;
+    margin-top: 0.12em;
+    margin-right: 0.18em;
+    font-weight: 600;
     color: var(--color-primary);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .prose h2 {
-    font-size: 1.6em;
-    font-weight: 600;
-    margin-top: 3rem;
+    font-family: var(--font-serif);
+    font-size: 1.85em;
+    font-weight: 500;
+    margin-top: 3.5rem;
     margin-bottom: 1.25rem;
     scroll-margin-top: 6rem;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     color: var(--color-foreground);
   }
+
   .prose h3 {
-    font-size: 1.3em;
-    font-weight: 600;
+    font-family: var(--font-serif);
+    font-size: 1.4em;
+    font-weight: 500;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     scroll-margin-top: 6rem;
-    letter-spacing: 0.02em;
     color: var(--color-foreground);
   }
+
   .prose p {
-    margin-top: 1.2rem;
-    margin-bottom: 1.2rem;
+    margin-top: 1.4rem;
+    margin-bottom: 1.4rem;
   }
+
   .prose a {
     color: var(--color-primary);
     text-decoration: underline;
-    text-underline-offset: 3px;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--color-border);
+    transition: text-decoration-color 0.2s ease;
   }
-  .prose ul,
-  .prose ol {
-    margin: 1rem 0;
-    padding-left: 1.5rem;
+  .prose a:hover {
+    text-decoration-color: var(--color-primary);
   }
-  .prose ul {
-    list-style: disc;
-  }
-  .prose ol {
-    list-style: decimal;
-  }
-  .prose li {
-    margin: 0.4rem 0;
-  }
+
   .prose blockquote {
-    border-left: 3px solid var(--color-primary);
-    padding-left: 1rem;
-    margin: 1.5rem 0;
+    border-left: 2px solid var(--color-primary);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
     color: var(--color-muted);
     font-style: italic;
+    font-size: 1.15em;
   }
+
   .prose img {
-    border-radius: var(--radius-lg);
-    margin: 1.5rem 0;
-  }
-  .prose code {
-    background-color: var(--color-surface-2);
-    padding: 0.15rem 0.4rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.875em;
-  }
-  .prose pre {
-    background-color: var(--color-surface-2);
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    margin: 1.5rem 0;
-  }
-  .prose pre code {
-    background: transparent;
-    padding: 0;
+    border-radius: 0.5rem;
+    margin: 2rem 0;
+    border: 1px solid var(--color-border);
   }
 
-  /* Prose sizing classes */
-  .prose.prose-sm { font-size: 0.875rem; }
-  .prose.prose-base { font-size: 1rem; }
-  .prose.prose-lg { font-size: 1.125rem; }
-  .prose.prose-xl { font-size: 1.25rem; }
-  .prose.prose-2xl { font-size: 1.5rem; }
-
-  /* Prose font-family classes */
-  .prose.prose-font-serif { font-family: var(--font-serif); }
-  .prose.prose-font-sans { font-family: var(--font-sans); }
-  .prose.prose-font-mono { font-family: var(--font-sans); font-feature-settings: normal; font-variation-settings: normal; font-family: monospace; }
-
-  /* Drifting ambient mesh animations */
-  @keyframes drift1 {
-    0% { transform: translate3d(0, 0, 0) scale(1); }
-    100% { transform: translate3d(60px, -40px, 0) scale(1.05); }
-  }
-  @keyframes drift2 {
-    0% { transform: translate3d(0, 0, 0) scale(1); }
-    100% { transform: translate3d(-50px, 50px, 0) scale(0.95); }
-  }
-
-  .mesh-glow-1 {
-    animation: drift1 20s cubic-bezier(0.32, 0.72, 0, 1) infinite alternate;
-  }
-  .mesh-glow-2 {
-    animation: drift2 24s cubic-bezier(0.32, 0.72, 0, 1) infinite alternate;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .mesh-glow-1, .mesh-glow-2 {
-      animation: none;
-    }
-  }
-
-  /* Custom cubic-bezier transition utility classes */
-  .transition-premium {
+  /* Custom cubic-bezier transition */
+  .transition-editorial {
     transition-property: all;
-    transition-duration: 500ms;
-    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+    transition-duration: 600ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Cinematic Scroll-Driven Reveal Transitions */
   .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1), transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(20px);
+    transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
   }
 

@@ -84,132 +84,106 @@ const finalCover = cover
         <ArticleMeta author={author} publishDate={publishDate} minutes={minutes} />
       </div>
 
-      <!-- Double-Bezel Control Panel (Font & Text Size) -->
-      <div class="mt-8 p-1 rounded-2xl bg-black/20 ring-1 ring-white/5 backdrop-blur-md shadow-inner">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-5 py-3 rounded-[calc(1rem+0.25rem)] bg-[var(--color-surface)] ring-1 ring-white/5">
-          
-          <!-- Font family selector -->
-          <div class="flex items-center justify-between gap-3 md:justify-start">
-            <div class="flex items-center gap-2">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-primary)]">
-                <polyline points="4 7 4 4 20 4 20 7"></polyline>
-                <line x1="9" y1="20" x2="15" y2="20"></line>
-                <line x1="12" y1="4" x2="12" y2="20"></line>
-              </svg>
-              <span class="font-mono text-[10px] uppercase tracking-wider text-[var(--color-muted)]">Gaya Huruf</span>
-            </div>
-            <div class="flex items-center gap-1 bg-black/20 rounded-full p-0.5 border border-white/5">
-              <button 
-                type="button"
-                id="font-serif" 
-                class="h-7 px-3.5 rounded-full flex items-center justify-center text-[10px] font-medium font-serif tracking-wider transition-all duration-300 cursor-pointer active:scale-95"
-                title="Font Serif (Klasik)"
-              >
-                Serif
-              </button>
-              <button 
-                type="button"
-                id="font-sans" 
-                class="h-7 px-3.5 rounded-full flex items-center justify-center text-[10px] font-medium font-sans tracking-wider transition-all duration-300 cursor-pointer active:scale-95"
-                title="Font Sans (Modern)"
-              >
-                Sans
-              </button>
-              <button 
-                type="button"
-                id="font-mono" 
-                class="h-7 px-3.5 rounded-full flex items-center justify-center text-[10px] font-medium font-mono tracking-wider transition-all duration-300 cursor-pointer active:scale-95"
-                title="Font Mono (Kode)"
-              >
-                Mono
-              </button>
-            </div>
+      <!-- Editorial Control Panel (Font, Text Size, Export) -->
+      <div class="mt-8 py-3 px-4 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/60 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-[var(--color-muted)]">
+        
+        <!-- Font family selector -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] uppercase tracking-wider text-[var(--color-primary)]">Huruf:</span>
+          <div class="flex items-center gap-1">
+            <button 
+              type="button"
+              id="font-serif" 
+              class="px-2.5 py-1 rounded text-[11px] font-serif transition-colors hover:text-[var(--color-foreground)] cursor-pointer"
+              title="Font Serif (Klasik)"
+            >
+              Serif
+            </button>
+            <button 
+              type="button"
+              id="font-sans" 
+              class="px-2.5 py-1 rounded text-[11px] font-sans transition-colors hover:text-[var(--color-foreground)] cursor-pointer"
+              title="Font Sans (Modern)"
+            >
+              Sans
+            </button>
+            <button 
+              type="button"
+              id="font-mono" 
+              class="px-2.5 py-1 rounded text-[11px] font-mono transition-colors hover:text-[var(--color-foreground)] cursor-pointer"
+              title="Font Mono (Kode)"
+            >
+              Mono
+            </button>
           </div>
-
-          <!-- Text size changer -->
-          <div class="flex items-center justify-between gap-3 md:justify-end">
-            <div class="flex items-center gap-2">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-primary)]">
-                <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
-              </svg>
-              <span class="font-mono text-[10px] uppercase tracking-wider text-[var(--color-muted)]">Ukuran Teks</span>
-            </div>
-            <div class="flex items-center gap-1 bg-black/20 rounded-full p-0.5 border border-white/5">
-              <button 
-                type="button"
-                id="text-dec" 
-                class="h-7 w-7 rounded-full flex items-center justify-center text-xs font-mono text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-all cursor-pointer active:scale-90"
-                title="Perkecil tulisan (A-)"
-              >
-                A-
-              </button>
-              <button 
-                type="button"
-                id="text-normal" 
-                class="h-7 px-3.5 rounded-full flex items-center justify-center text-[9px] uppercase font-mono tracking-wider font-semibold text-[var(--color-primary)] hover:text-[var(--color-foreground)] transition-all cursor-pointer active:scale-95"
-                title="Ukuran normal"
-              >
-                Normal
-              </button>
-              <button 
-                type="button"
-                id="text-inc" 
-                class="h-7 w-7 rounded-full flex items-center justify-center text-xs font-mono text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-all cursor-pointer active:scale-90"
-                title="Perbesar tulisan (A+)"
-              >
-                A+
-              </button>
-            </div>
-          </div>
-
-          <!-- Export backup control group -->
-          <div class="flex items-center justify-between gap-3 md:justify-end">
-            <div class="flex items-center gap-2">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-primary)]">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span class="font-mono text-[10px] uppercase tracking-wider text-[var(--color-muted)]">Backup</span>
-            </div>
-            <div class="flex items-center bg-black/20 rounded-full p-0.5 border border-white/5">
-              <button 
-                type="button"
-                id="export-md" 
-                class="h-7 px-3.5 rounded-full flex items-center justify-center text-[10px] font-medium font-mono tracking-wider text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-all duration-300 cursor-pointer active:scale-95"
-                title="Unduh artikel sebagai Markdown (.md)"
-                data-filename={`${entry.id}.md`}
-                data-title={title}
-                data-desc={description}
-                data-date={publishDate}
-                data-author={author}
-                data-source={sourceUrl || ''}
-                data-cover={cover || ''}
-                data-body-base64={Buffer.from(rawBody).toString('base64')}
-              >
-                Unduh .MD
-              </button>
-            </div>
-          </div>
-
         </div>
+
+        <!-- Text size changer -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] uppercase tracking-wider text-[var(--color-primary)]">Ukuran:</span>
+          <div class="flex items-center gap-1">
+            <button 
+              type="button"
+              id="text-dec" 
+              class="px-2 py-0.5 rounded text-xs transition-colors hover:text-[var(--color-foreground)] cursor-pointer"
+              title="Perkecil tulisan (A-)"
+            >
+              A-
+            </button>
+            <button 
+              type="button"
+              id="text-normal" 
+              class="px-2.5 py-0.5 rounded text-[10px] uppercase text-[var(--color-primary)] transition-colors hover:text-[var(--color-foreground)] cursor-pointer"
+              title="Ukuran normal"
+            >
+              Normal
+            </button>
+            <button 
+              type="button"
+              id="text-inc" 
+              class="px-2 py-0.5 rounded text-xs transition-colors hover:text-[var(--color-foreground)] cursor-pointer"
+              title="Perbesar tulisan (A+)"
+            >
+              A+
+            </button>
+          </div>
+        </div>
+
+        <!-- Export MD -->
+        <div class="flex items-center gap-2">
+          <button 
+            type="button"
+            id="export-md" 
+            class="px-3 py-1 rounded border border-[var(--color-border-subtle)] text-[10px] uppercase tracking-wider text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-colors cursor-pointer"
+            title="Unduh artikel sebagai Markdown (.md)"
+            data-filename={`${entry.id}.md`}
+            data-title={title}
+            data-desc={description}
+            data-date={publishDate}
+            data-author={author}
+            data-source={sourceUrl || ''}
+            data-cover={cover || ''}
+            data-body-base64={Buffer.from(rawBody).toString('base64')}
+          >
+            Unduh .MD &darr;
+          </button>
+        </div>
+
       </div>
     </header>
 
-    <!-- Double-Bezel Nested Cover Image Frame -->
+    <!-- Clean Editorial Cover Image Frame -->
     {
       finalCover && (
-        <div class="mb-16 rounded-[2.5rem] bg-black/15 p-2 ring-1 ring-white/10 backdrop-blur-3xl shadow-2xl reveal-on-scroll">
-          <div class="overflow-hidden rounded-[calc(2.5rem-0.5rem)] border border-white/5 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]">
-            <Image
-              src={finalCover}
-              alt={`Ilustrasi untuk artikel ${title}`}
-              loading="eager"
-              widths={[480, 768, 1200]}
-              sizes="(min-width: 768px) 768px, 100vw"
-              class="aspect-[21/9] w-full object-cover transition-transform duration-700 hover:scale-102"
-            />
-          </div>
+        <div class="mb-14 overflow-hidden rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-surface-2)] reveal-on-scroll">
+          <Image
+            src={finalCover}
+            alt={`Ilustrasi untuk artikel ${title}`}
+            loading="eager"
+            widths={[480, 768, 1200]}
+            sizes="(min-width: 768px) 768px, 100vw"
+            class="aspect-[21/9] w-full object-cover"
+          />
         </div>
       )
     }
